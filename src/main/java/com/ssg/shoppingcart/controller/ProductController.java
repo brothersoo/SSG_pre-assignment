@@ -21,7 +21,7 @@ public class ProductController {
   private final ProductService productService;
 
   @GetMapping
-  public ResponseEntity<Page<ProductInfo>> productFilteredList(
+  public ResponseEntity<Page<ProductInfo>> filteredProductList(
       ProductListFilter filter, @PageableDefault Pageable pageable) {
     return new ResponseEntity<>(
         productService.findFilteredProducts(filter, pageable), HttpStatus.OK);
