@@ -1,13 +1,24 @@
 server:
   port: 9999
 
-# datasource
 spring:
+  # datasource
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ENC(QNEuZaU7UQDHzoPTEX7aUFhLB6iwCmjW3G7nfN8vLcqeNxg+T+gQ+3LG3rJY/L7pjbrdURCMt4nkk1QHLqp2cAg/eaVf1UlsoUyYYsd19CjvWwjYqBw7SGwfHl4201OrPxc1PID5i2sR5SokzArJCfVtmDgrO+V2fjt9hddf1NdCMajC1z2NBrKf9r0tG5jo)
     username: ENC(r8f0KG7JMJuuuAu1i+P6MVBdrFIyMu61)
     password: ENC(EkSkO73xvolBWXLqEdCUig==)
+  # JPA
+  jpa:
+    hibernate:
+    ddl-auto: validate
+    generate-ddl: false
+    show-sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        format_sql: true
 
 # jasypt
 jasypt:
