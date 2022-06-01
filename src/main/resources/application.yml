@@ -24,3 +24,9 @@ spring:
 jasypt:
   encryptor:
     password: ${JASYPT_PASSWORD}
+
+# logging
+logging:
+  level:
+    com.ssg.shoppingcart: debug
+    org.hibernate: info
