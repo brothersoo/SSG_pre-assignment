@@ -1,6 +1,6 @@
 package com.ssg.shoppingcart.domain;
 
-import java.util.Collection;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,25 +16,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="group")
+@Table(name="ssg_product_group")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Group {
+public class ProductGroup extends BaseTimeStampEntity {
 
   @Id
-  @Column(name="group_id")
   @GeneratedValue(strategy= GenerationType.IDENTITY)
+  @Column(name="ssg_product_group_id")
   private Long id;
 
-  @Column(name="name")
+  @Column(name="name", unique=true, nullable=false)
   private String name;
 
-  @OneToMany(cascade=CascadeType.ALL)
-  @JoinColumn(name="group_id")
-  private Collection<Product> products;
+  @OneToMany(targetEntity=Product.class, cascade=CascadeType.ALL, mappedBy="productGroup")
+  private Set<Product> products;
 
   @Builder
-  public Group(String name, Collection<Product> products) {
+  public ProductGroup(String name, Set<Product> products) {
     this.name = name;
     this.products = products;
   }
