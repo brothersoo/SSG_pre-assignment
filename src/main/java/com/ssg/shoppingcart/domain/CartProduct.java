@@ -47,7 +47,7 @@ public class CartProduct extends BaseTimeStampEntity {
     this.user = user;
   }
 
-  public void addQuantity(int n) {
-    this.quantity += n;
+  public void modifyQuantity(int quantity) {
+    this.quantity = quantity;
   }
 }

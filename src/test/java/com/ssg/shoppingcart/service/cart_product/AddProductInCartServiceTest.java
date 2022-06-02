@@ -31,7 +31,7 @@ import org.mockito.stubbing.Answer;
 import org.modelmapper.ModelMapper;
 
 @ExtendWith(MockitoExtension.class)
-class CartProductServiceTest {
+class AddProductInCartServiceTest {
 
   @Mock
   CartProductRepository cartProductRepository;
@@ -51,7 +51,7 @@ class CartProductServiceTest {
     final String email = "abc@cba.com";
     User user = User.builder().id(1L).email(email).cartProducts(new ArrayList<>()).build();
     final Long productId = 1L;
-    Product product = Product.builder().id(productId).build();
+    Product product = Product.builder().id(productId).stock(10).build();
     when(userRepository.findByEmail(email)).thenReturn(user);
     when(productRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(product));
     when(cartProductRepository.findByUserAndProduct(user.getId(), productId)).thenReturn(null);
@@ -66,7 +66,7 @@ class CartProductServiceTest {
         });
 
     // when
-    final int quantity = 10;
+    final int quantity = product.getStock() - 1;
     final boolean addingIsConfirmed = false;
     CartProductInfo cartProductInfo
         = cartProductService.addProductToCart(email, productId, quantity, addingIsConfirmed);
@@ -74,7 +74,6 @@ class CartProductServiceTest {
     // then
     assertThat(cartProductInfo.getQuantity()).isEqualTo(quantity);
     assertThat(cartProductInfo.getProduct().getId()).isEqualTo(productId);
-    assertThat(cartProductInfo.getUser().getEmail()).isEqualTo(email);
 
     verify(userRepository, times(1)).findByEmail(anyString());
     verify(productRepository, times(1)).findById(anyLong());
@@ -84,13 +83,65 @@ class CartProductServiceTest {
   }
 
   @Test
+  @DisplayName("재고 초과 수량 장바구니 등록 실패 테스트")
+  void stockExceedQuantityTest() {
+    // given
+    final String email = "abc@cba.com";
+    User user = User.builder().id(1L).email(email).cartProducts(new ArrayList<>()).build();
+    final Long productId = 1L;
+    Product product = Product.builder().id(productId).stock(10).build();
+    when(userRepository.findByEmail(email)).thenReturn(user);
+    when(productRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(product));
+
+    // when
+    final int quantity = product.getStock() + 1;
+    final boolean addingIsConfirmed = false;
+
+    // then
+    Assertions.assertThrows(IllegalArgumentException.class, () ->
+        cartProductService.addProductToCart(email, productId, quantity, addingIsConfirmed));
+
+    verify(userRepository, times(1)).findByEmail(anyString());
+    verify(productRepository, times(1)).findById(anyLong());
+    verify(cartProductRepository, times(0))
+        .findByUserAndProduct(anyLong(), anyLong());
+    verify(cartProductRepository, times(0)).save(any(CartProduct.class));
+  }
+
+  @Test
+  @DisplayName("음수 수량 장바구니 등록 실패 테스트")
+  void negativeQuantityTest() {
+    // given
+    final String email = "abc@cba.com";
+    User user = User.builder().id(1L).email(email).cartProducts(new ArrayList<>()).build();
+    final Long productId = 1L;
+    Product product = Product.builder().id(productId).stock(10).build();
+    when(userRepository.findByEmail(email)).thenReturn(user);
+    when(productRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(product));
+
+    // when
+    final int quantity = -1;
+    final boolean addingIsConfirmed = false;
+
+    // then
+    Assertions.assertThrows(IllegalArgumentException.class, () ->
+        cartProductService.addProductToCart(email, productId, quantity, addingIsConfirmed));
+
+    verify(userRepository, times(1)).findByEmail(anyString());
+    verify(productRepository, times(1)).findById(anyLong());
+    verify(cartProductRepository, times(0))
+        .findByUserAndProduct(anyLong(), anyLong());
+    verify(cartProductRepository, times(0)).save(any(CartProduct.class));
+  }
+
+  @Test
   @DisplayName("카트에 이미 존재하는 상품 추가 성공 테스트")
   void addExistingProductToCartSuccessTest() {
     // given
     final String email = "abc@cba.com";
     User user = User.builder().id(1L).email(email).cartProducts(new ArrayList<>()).build();
     final Long productId = 1L;
-    Product product = Product.builder().id(productId).build();
+    Product product = Product.builder().id(productId).stock(10).build();
     final int initialQuantity = 5;
     CartProduct cartProduct = CartProduct.builder().user(user).product(product)
         .quantity(initialQuantity).build();
@@ -109,15 +160,15 @@ class CartProductServiceTest {
         });
 
     // when
-    final int newQuantity = 10;
+    final int additionalQuantity = product.getStock() - initialQuantity - 1;
     final boolean addingIsConfirmed = true;
     CartProductInfo cartProductInfo
-        = cartProductService.addProductToCart(email, productId, newQuantity, addingIsConfirmed);
+        = cartProductService.addProductToCart(email, productId, additionalQuantity,
+        addingIsConfirmed);
 
     // then
-    assertThat(cartProductInfo.getQuantity()).isEqualTo(initialQuantity + newQuantity);
+    assertThat(cartProductInfo.getQuantity()).isEqualTo(initialQuantity + additionalQuantity);
     assertThat(cartProductInfo.getProduct().getId()).isEqualTo(productId);
-    assertThat(cartProductInfo.getUser().getEmail()).isEqualTo(email);
 
     verify(userRepository, times(1)).findByEmail(anyString());
     verify(productRepository, times(1)).findById(anyLong());
@@ -127,13 +178,13 @@ class CartProductServiceTest {
   }
 
   @Test
-  @DisplayName("카트에 이미 존재하는 상품 추가 실패 테스트")
+  @DisplayName("기존 수량 + 추가 수량 재고 초과 등록 실패 테스트")
   void addExistingProductToCartFailTest() {
     // given
     final String email = "abc@cba.com";
     User user = User.builder().id(1L).email(email).cartProducts(new ArrayList<>()).build();
     final Long productId = 1L;
-    Product product = Product.builder().id(productId).build();
+    Product product = Product.builder().id(productId).stock(10).build();
     CartProduct cartProduct = CartProduct.builder().user(user).product(product).quantity(5).build();
     when(userRepository.findByEmail(email)).thenReturn(user);
     when(productRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(product));
@@ -141,7 +192,7 @@ class CartProductServiceTest {
         .thenReturn(cartProduct);
 
     // when
-    final int quantity = 10;
+    final int quantity = product.getStock() - 1;
     final boolean addingIsConfirmed = false;
 
     // then
