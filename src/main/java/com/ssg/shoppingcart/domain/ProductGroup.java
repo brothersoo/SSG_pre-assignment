@@ -1,5 +1,6 @@
 package com.ssg.shoppingcart.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -7,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
@@ -16,20 +16,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="ssg_product_group")
+@Table(name = "ssg_product_group")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class ProductGroup extends BaseTimeStampEntity {
 
   @Id
-  @GeneratedValue(strategy= GenerationType.IDENTITY)
-  @Column(name="ssg_product_group_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ssg_product_group_id")
   private Long id;
 
-  @Column(name="name", unique=true, nullable=false)
+  @Column(name = "name", unique = true, nullable = false)
   private String name;
 
-  @OneToMany(targetEntity=Product.class, cascade=CascadeType.ALL, mappedBy="productGroup")
+  @OneToMany(targetEntity = Product.class, cascade = CascadeType.ALL, mappedBy = "productGroup")
+  @JsonManagedReference
   private Set<Product> products;
 
   @Builder

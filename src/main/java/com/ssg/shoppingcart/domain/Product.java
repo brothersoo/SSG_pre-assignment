@@ -1,5 +1,6 @@
 package com.ssg.shoppingcart.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,31 +17,33 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="ssg_product")
+@Table(name = "ssg_product")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Product extends BaseTimeStampEntity {
 
   @Id
-  @Column(name="ssg_product_id")
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @Column(name = "ssg_product_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name="name", unique=true, nullable=false)
+  @Column(name = "name", unique = true, nullable = false)
   private String name;
 
-  @Column(name="price", nullable=false)
+  @Column(name = "price", nullable = false)
   private Integer price;
 
-  @Column(name="stock", nullable=false)
+  @Column(name = "stock", nullable = false)
   private Integer stock;
 
-  @ManyToOne(targetEntity=ProductGroup.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-  @JoinColumn(name="ssg_product_group_id")
+  @ManyToOne(targetEntity = ProductGroup.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "ssg_product_group_id")
+  @JsonBackReference
   private ProductGroup productGroup;
 
   @Builder
-  public Product(String name, Integer price, Integer stock, ProductGroup productGroup) {
+  public Product(Long id, String name, Integer price, Integer stock, ProductGroup productGroup) {
+    this.id = id;
     this.name = name;
     this.price = price;
     this.stock = stock;
