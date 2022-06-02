@@ -1,5 +1,7 @@
 package com.ssg.shoppingcart.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,24 +20,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="ssg_order")
-@NoArgsConstructor(access=AccessLevel.PROTECTED)
+@Table(name = "ssg_order")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Order extends BaseTimeStampEntity {
 
   @Id
-  @Column(name="ssg_order_id")
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @Column(name = "ssg_order_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name="total_price", nullable=false)
+  @Column(name = "total_price", nullable = false)
   private Integer totalPrice;
 
-  @ManyToOne(targetEntity=User.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-  @JoinColumn(name="ssg_user_id")
+  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "ssg_user_id")
+  @JsonBackReference
   private User user;
 
-  @OneToMany(targetEntity=OrderProduct.class, cascade=CascadeType.ALL, mappedBy="order")
+  @OneToMany(targetEntity = OrderProduct.class, cascade = CascadeType.ALL, mappedBy = "order")
+  @JsonManagedReference
   private List<OrderProduct> orderProducts;
 
   @Builder

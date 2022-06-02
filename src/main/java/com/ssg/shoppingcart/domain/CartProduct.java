@@ -1,5 +1,6 @@
 package com.ssg.shoppingcart.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,25 +18,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="ssg_cart_product")
-@NoArgsConstructor(access=AccessLevel.PROTECTED)
+@Table(name = "ssg_cart_product")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class CartProduct extends BaseTimeStampEntity {
 
   @Id
-  @Column(name="ssg_cart_product_id")
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @Column(name = "ssg_cart_product_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name="quantity", nullable=false)
+  @Column(name = "quantity", nullable = false)
   private Integer quantity;
 
-  @OneToOne(targetEntity=Product.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-  @JoinColumn(name="ssg_product_id")
+  @OneToOne(targetEntity = Product.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "ssg_product_id")
   private Product product;
 
-  @ManyToOne(targetEntity=User.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-  @JoinColumn(name="ssg_user_id")
+  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "ssg_user_id")
+  @JsonBackReference
   private User user;
 
   @Builder
@@ -43,5 +45,9 @@ public class CartProduct extends BaseTimeStampEntity {
     this.quantity = quantity;
     this.product = product;
     this.user = user;
+  }
+
+  public void addQuantity(int n) {
+    this.quantity += n;
   }
 }
