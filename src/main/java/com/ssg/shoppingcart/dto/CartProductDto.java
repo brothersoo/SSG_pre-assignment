@@ -17,6 +17,14 @@ public class CartProductDto {
     private Boolean addingIsConfirmed;
   }
 
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Data
+  public static class CartProductQuantityModifyRequest {
+
+    private Integer quantity;
+  }
+
   @NoArgsConstructor
   @Data
   public static class CartProductInfo {

@@ -41,10 +41,19 @@ public class CartProductServiceImpl implements CartProductService {
     }
     Product product = optionalProduct.get();
 
+    if (quantity <= 0 || quantity > product.getStock()) {
+      throw new IllegalArgumentException("invalid quantity");
+    }
+
     CartProduct cartProduct = cartProductRepository.findByUserAndProduct(user.getId(), productId);
     if (cartProduct != null) {
       if (addingIsConfirmed) {
-        cartProduct.addQuantity(quantity);
+        int newQuantity = cartProduct.getQuantity() + quantity;
+        if (newQuantity <= 0 || newQuantity > product.getStock()) {
+          throw new IllegalArgumentException("invalid quantity");
+        } else {
+          cartProduct.modifyQuantity(newQuantity);
+        }
       } else {
         throw new IllegalArgumentException("adding quantity denied");
       }
@@ -78,5 +87,23 @@ public class CartProductServiceImpl implements CartProductService {
     }
 
     return groupedCartProductInfo;
+  }
+
+  @Override
+  @Transactional
+  public CartProductInfo modifyCartProductQuantity(Long cartProductId, int quantity) {
+    Optional<CartProduct> optionalCartProduct = cartProductRepository.findById(cartProductId);
+    if (!optionalCartProduct.isPresent()) {
+      throw new IllegalArgumentException("no such cart product found with the given id");
+    }
+
+    CartProduct cartProduct = optionalCartProduct.get();
+
+    if (quantity <= 0 || quantity > cartProduct.getProduct().getStock()) {
+      throw new IllegalArgumentException("invalid quantity");
+    }
+
+    cartProduct.modifyQuantity(quantity);
+    return modelMapper.map(cartProduct, CartProductInfo.class);
   }
 }

@@ -10,4 +10,6 @@ public interface CartProductService {
       String userEmail, Long productId, int quantity, boolean addingIsConfirmed);
 
   Map<String, List<CartProductInfo>> findAllCartProductsForUser(String userEmail);
+
+  CartProductInfo modifyCartProductQuantity(Long cartProductId, int quantity);
 }
