@@ -31,7 +31,7 @@ import org.mockito.stubbing.Answer;
 import org.modelmapper.ModelMapper;
 
 @ExtendWith(MockitoExtension.class)
-class CartProductServiceTest {
+class AddProductInCartServiceTest {
 
   @Mock
   CartProductRepository cartProductRepository;
@@ -74,7 +74,6 @@ class CartProductServiceTest {
     // then
     assertThat(cartProductInfo.getQuantity()).isEqualTo(quantity);
     assertThat(cartProductInfo.getProduct().getId()).isEqualTo(productId);
-    assertThat(cartProductInfo.getUser().getEmail()).isEqualTo(email);
 
     verify(userRepository, times(1)).findByEmail(anyString());
     verify(productRepository, times(1)).findById(anyLong());
@@ -117,7 +116,6 @@ class CartProductServiceTest {
     // then
     assertThat(cartProductInfo.getQuantity()).isEqualTo(initialQuantity + newQuantity);
     assertThat(cartProductInfo.getProduct().getId()).isEqualTo(productId);
-    assertThat(cartProductInfo.getUser().getEmail()).isEqualTo(email);
 
     verify(userRepository, times(1)).findByEmail(anyString());
     verify(productRepository, times(1)).findById(anyLong());

@@ -44,8 +44,9 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     JPAQuery<ProductInfo> query = queryFactory
         .select(Projections.constructor(
             ProductInfo.class,
-            product.id, product.name, product.price, product.stock))
+            product.id, product.name, product.price, product.stock, product.productGroup.name))
         .from(product)
+        .join(product.productGroup)
         .where(condition)
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize());

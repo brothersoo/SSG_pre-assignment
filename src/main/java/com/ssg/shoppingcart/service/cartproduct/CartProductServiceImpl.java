@@ -7,6 +7,10 @@ import com.ssg.shoppingcart.dto.CartProductDto.CartProductInfo;
 import com.ssg.shoppingcart.repository.cartproduct.CartProductRepository;
 import com.ssg.shoppingcart.repository.product.ProductRepository;
 import com.ssg.shoppingcart.repository.user.UserRepository;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -51,5 +55,28 @@ public class CartProductServiceImpl implements CartProductService {
     }
 
     return modelMapper.map(cartProductRepository.save(cartProduct), CartProductInfo.class);
+  }
+
+  @Override
+  public Map<String, List<CartProductInfo>> findAllCartProductsForUser(String userEmail) {
+    User user = userRepository.findByEmail(userEmail);
+    if (user == null) {
+      throw new IllegalArgumentException("no such user found with the given email");
+    }
+
+    List<CartProductInfo> cartProductInfos = cartProductRepository.findAllByUserEmail(userEmail);
+    Map<String, List<CartProductInfo>> groupedCartProductInfo = new HashMap<>();
+    for (CartProductInfo cartProductInfo : cartProductInfos) {
+      groupedCartProductInfo.putIfAbsent(
+          cartProductInfo.getProduct().getProductGroupName(), new ArrayList<>());
+      groupedCartProductInfo.compute(
+          cartProductInfo.getProduct().getProductGroupName(),
+          (String k, List<CartProductInfo> v) -> {
+            v.add(cartProductInfo);
+            return v;
+          });
+    }
+
+    return groupedCartProductInfo;
   }
 }
