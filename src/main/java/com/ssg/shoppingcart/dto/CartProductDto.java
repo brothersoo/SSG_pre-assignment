@@ -14,7 +14,6 @@ public class CartProductDto {
 
     private String userEmail;
     private int quantity;
-    private Boolean addingIsConfirmed;
   }
 
   @AllArgsConstructor

@@ -6,8 +6,7 @@ import java.util.Map;
 
 public interface CartProductService {
 
-  CartProductInfo addProductToCart(
-      String userEmail, Long productId, int quantity, boolean addingIsConfirmed);
+  CartProductInfo addProductToCart(String userEmail, Long productId, int quantity);
 
   Map<String, List<CartProductInfo>> findAllCartProductsForUser(String userEmail);
 

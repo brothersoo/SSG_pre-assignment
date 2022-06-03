@@ -67,9 +67,8 @@ class AddProductInCartServiceTest {
 
     // when
     final int quantity = product.getStock() - 1;
-    final boolean addingIsConfirmed = false;
     CartProductInfo cartProductInfo
-        = cartProductService.addProductToCart(email, productId, quantity, addingIsConfirmed);
+        = cartProductService.addProductToCart(email, productId, quantity);
 
     // then
     assertThat(cartProductInfo.getQuantity()).isEqualTo(quantity);
@@ -83,7 +82,7 @@ class AddProductInCartServiceTest {
   }
 
   @Test
-  @DisplayName("재고 초과 수량 장바구니 등록 실패 테스트")
+  @DisplayName("입력한 수량 재고 초과로 인한 장바구니 등록 실패 테스트")
   void stockExceedQuantityTest() {
     // given
     final String email = "abc@cba.com";
@@ -95,11 +94,10 @@ class AddProductInCartServiceTest {
 
     // when
     final int quantity = product.getStock() + 1;
-    final boolean addingIsConfirmed = false;
 
     // then
     Assertions.assertThrows(IllegalArgumentException.class, () ->
-        cartProductService.addProductToCart(email, productId, quantity, addingIsConfirmed));
+        cartProductService.addProductToCart(email, productId, quantity));
 
     verify(userRepository, times(1)).findByEmail(anyString());
     verify(productRepository, times(1)).findById(anyLong());
@@ -109,7 +107,7 @@ class AddProductInCartServiceTest {
   }
 
   @Test
-  @DisplayName("음수 수량 장바구니 등록 실패 테스트")
+  @DisplayName("입력한 수량 음수로 인한 장바구니 등록 실패 테스트")
   void negativeQuantityTest() {
     // given
     final String email = "abc@cba.com";
@@ -121,11 +119,10 @@ class AddProductInCartServiceTest {
 
     // when
     final int quantity = -1;
-    final boolean addingIsConfirmed = false;
 
     // then
     Assertions.assertThrows(IllegalArgumentException.class, () ->
-        cartProductService.addProductToCart(email, productId, quantity, addingIsConfirmed));
+        cartProductService.addProductToCart(email, productId, quantity));
 
     verify(userRepository, times(1)).findByEmail(anyString());
     verify(productRepository, times(1)).findById(anyLong());
@@ -161,10 +158,8 @@ class AddProductInCartServiceTest {
 
     // when
     final int additionalQuantity = product.getStock() - initialQuantity - 1;
-    final boolean addingIsConfirmed = true;
     CartProductInfo cartProductInfo
-        = cartProductService.addProductToCart(email, productId, additionalQuantity,
-        addingIsConfirmed);
+        = cartProductService.addProductToCart(email, productId, additionalQuantity);
 
     // then
     assertThat(cartProductInfo.getQuantity()).isEqualTo(initialQuantity + additionalQuantity);
@@ -193,11 +188,10 @@ class AddProductInCartServiceTest {
 
     // when
     final int quantity = product.getStock() - 1;
-    final boolean addingIsConfirmed = false;
 
     // then
     Assertions.assertThrows(IllegalArgumentException.class, () ->
-        cartProductService.addProductToCart(email, productId, quantity, addingIsConfirmed));
+        cartProductService.addProductToCart(email, productId, quantity));
 
     verify(userRepository, times(1)).findByEmail(anyString());
     verify(productRepository, times(1)).findById(anyLong());
@@ -220,7 +214,7 @@ class AddProductInCartServiceTest {
 
     // then
     Assertions.assertThrows(IllegalArgumentException.class, () ->
-        cartProductService.addProductToCart(email, productId, quantity, addingIsConfirmed));
+        cartProductService.addProductToCart(email, productId, quantity));
 
     verify(userRepository, times(1)).findByEmail(anyString());
     verify(productRepository, times(0)).findById(anyLong());
@@ -245,7 +239,7 @@ class AddProductInCartServiceTest {
 
     // then
     Assertions.assertThrows(IllegalArgumentException.class, () ->
-        cartProductService.addProductToCart(email, productId, quantity, addingIsConfirmed));
+        cartProductService.addProductToCart(email, productId, quantity));
 
     verify(userRepository, times(1)).findByEmail(anyString());
     verify(productRepository, times(1)).findById(anyLong());

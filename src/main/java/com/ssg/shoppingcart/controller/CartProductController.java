@@ -35,8 +35,7 @@ public class CartProductController {
         cartProductService.addProductToCart(
             requestBody.getUserEmail(),
             productId,
-            requestBody.getQuantity(),
-            requestBody.getAddingIsConfirmed()
+            requestBody.getQuantity()
         ),
         HttpStatus.CREATED
     );

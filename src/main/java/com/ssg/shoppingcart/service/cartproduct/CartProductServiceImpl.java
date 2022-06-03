@@ -28,8 +28,7 @@ public class CartProductServiceImpl implements CartProductService {
 
   @Override
   @Transactional
-  public CartProductInfo addProductToCart(String userEmail, Long productId,
-      int quantity, boolean addingIsConfirmed) {
+  public CartProductInfo addProductToCart(String userEmail, Long productId, int quantity) {
     User user = userRepository.findByEmail(userEmail);
     if (user == null) {
       throw new IllegalArgumentException("no such user found with the given email");
@@ -42,20 +41,16 @@ public class CartProductServiceImpl implements CartProductService {
     Product product = optionalProduct.get();
 
     if (quantity <= 0 || quantity > product.getStock()) {
-      throw new IllegalArgumentException("invalid quantity");
+      throw new IllegalArgumentException("invalid quantity value " + quantity);
     }
 
     CartProduct cartProduct = cartProductRepository.findByUserAndProduct(user.getId(), productId);
     if (cartProduct != null) {
-      if (addingIsConfirmed) {
-        int newQuantity = cartProduct.getQuantity() + quantity;
-        if (newQuantity <= 0 || newQuantity > product.getStock()) {
-          throw new IllegalArgumentException("invalid quantity");
-        } else {
-          cartProduct.modifyQuantity(newQuantity);
-        }
+      int newQuantity = cartProduct.getQuantity() + quantity;
+      if (newQuantity <= 0 || newQuantity > product.getStock()) {
+        throw new IllegalArgumentException("invalid total quantity " + newQuantity);
       } else {
-        throw new IllegalArgumentException("adding quantity denied");
+        cartProduct.modifyQuantity(newQuantity);
       }
     } else {
       cartProduct = CartProduct.builder()
