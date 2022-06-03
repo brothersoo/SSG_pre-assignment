@@ -29,7 +29,8 @@ public class CartProductController {
   @PostMapping("/{productId}")
   public ResponseEntity<CartProductInfo> cartProductAdd(
       @PathVariable("productId") Long productId,
-      @RequestBody CartProductAddRequest requestBody) {
+      @RequestBody CartProductAddRequest requestBody
+  ) {
     return new ResponseEntity<>(
         cartProductService.addProductToCart(
             requestBody.getUserEmail(),
@@ -44,7 +45,8 @@ public class CartProductController {
   // TODO: change getting user email from param to JWT
   @GetMapping
   public ResponseEntity<Map<String, List<CartProductInfo>>> cartProductRetrieve(
-      @RequestParam("userEmail") String userEmail) {
+      @RequestParam("userEmail") String userEmail
+  ) {
     return new ResponseEntity<>(
         cartProductService.findAllCartProductsForUser(userEmail), HttpStatus.OK);
   }
@@ -52,7 +54,8 @@ public class CartProductController {
   @PutMapping("/{cartProductId}")
   public ResponseEntity<CartProductInfo> cartProductQuantityModify(
       @RequestParam("cartProductId") Long cartProductId,
-      @RequestBody CartProductQuantityModifyRequest requestBody) {
+      @RequestBody CartProductQuantityModifyRequest requestBody
+  ) {
     return new ResponseEntity<>(
         cartProductService.modifyCartProductQuantity(cartProductId, requestBody.getQuantity()),
         HttpStatus.OK

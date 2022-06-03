@@ -28,8 +28,8 @@ public class CartProductServiceImpl implements CartProductService {
 
   @Override
   @Transactional
-  public CartProductInfo addProductToCart(
-      String userEmail, Long productId, int quantity, boolean addingIsConfirmed) {
+  public CartProductInfo addProductToCart(String userEmail, Long productId,
+      int quantity, boolean addingIsConfirmed) {
     User user = userRepository.findByEmail(userEmail);
     if (user == null) {
       throw new IllegalArgumentException("no such user found with the given email");

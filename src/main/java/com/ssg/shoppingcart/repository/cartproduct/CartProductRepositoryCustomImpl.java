@@ -26,7 +26,8 @@ public class CartProductRepositoryCustomImpl implements CartProductRepositoryCus
 
   @Override
   public List<CartProductInfo> findAllByUserEmail(String email) {
-    return queryFactory.select(Projections.constructor(CartProductInfo.class,
+    return queryFactory
+        .select(Projections.constructor(CartProductInfo.class,
             cartProduct.id, cartProduct.quantity,
             cartProduct.product.id, cartProduct.product.name,
             cartProduct.product.price, cartProduct.product.stock,
