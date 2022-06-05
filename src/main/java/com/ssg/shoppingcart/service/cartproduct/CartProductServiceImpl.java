@@ -101,4 +101,10 @@ public class CartProductServiceImpl implements CartProductService {
     cartProduct.modifyQuantity(quantity);
     return modelMapper.map(cartProduct, CartProductInfo.class);
   }
+
+  @Override
+  public Long deleteCartProductById(Long cartProductId) {
+    cartProductRepository.deleteCartProductById(cartProductId);
+    return cartProductId;
+  }
 }

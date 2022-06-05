@@ -9,6 +9,7 @@ import com.ssg.shoppingcart.dto.CartProductDto.CartProductInfo;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,5 +39,12 @@ public class CartProductRepositoryCustomImpl implements CartProductRepositoryCus
         .join(cartProduct.product.productGroup)
         .where(cartProduct.user.email.eq(email))
         .fetch();
+  }
+
+  @Override
+  @Transactional
+  public Long deleteCartProductById(Long id) {
+    queryFactory.delete(cartProduct).where(cartProduct.id.eq(id)).execute();
+    return id;
   }
 }

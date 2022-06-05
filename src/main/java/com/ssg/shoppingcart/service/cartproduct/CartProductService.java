@@ -11,4 +11,6 @@ public interface CartProductService {
   Map<String, List<CartProductInfo>> findAllCartProductsForUser(String userEmail);
 
   CartProductInfo modifyCartProductQuantity(Long cartProductId, int quantity);
+
+  Long deleteCartProductById(Long cartProductId);
 }
