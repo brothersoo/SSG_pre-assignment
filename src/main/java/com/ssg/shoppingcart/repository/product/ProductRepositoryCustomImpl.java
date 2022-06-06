@@ -47,15 +47,16 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
             product.id, product.name, product.price, product.stock, product.productGroup.name))
         .from(product)
         .join(product.productGroup)
-        .where(condition)
-        .offset(pageable.getOffset())
-        .limit(pageable.getPageSize());
+        .where(condition);
 
     for (Sort.Order o : pageable.getSort()) {
       PathBuilder pathBuilder = new PathBuilder(product.getType(), product.getMetadata());
       query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
           pathBuilder.get(o.getProperty())));
     }
+
+    query.offset(pageable.getOffset())
+        .limit(pageable.getPageSize());
 
     List<ProductInfo> results = query.fetch();
 
