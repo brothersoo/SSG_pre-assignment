@@ -59,6 +59,12 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
     List<ProductInfo> results = query.fetch();
 
-    return new PageImpl(results, pageable, results.size());
+    Long count = queryFactory
+        .select(product.count())
+        .from(product)
+        .where(condition)
+        .fetchOne();
+
+    return new PageImpl(results, pageable, count);
   }
 }
