@@ -32,7 +32,7 @@ public class CartProductRepositoryCustomImpl implements CartProductRepositoryCus
             cartProduct.id, cartProduct.quantity,
             cartProduct.product.id, cartProduct.product.name,
             cartProduct.product.price, cartProduct.product.stock,
-            cartProduct.product.productGroup.name))
+            cartProduct.product.productGroup.id, cartProduct.product.productGroup.name))
         .from(cartProduct)
         .join(cartProduct.user)
         .join(cartProduct.product)

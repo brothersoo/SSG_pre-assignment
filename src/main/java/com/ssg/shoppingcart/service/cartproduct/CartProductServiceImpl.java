@@ -72,9 +72,9 @@ public class CartProductServiceImpl implements CartProductService {
     Map<String, List<CartProductInfo>> groupedCartProductInfo = new HashMap<>();
     for (CartProductInfo cartProductInfo : cartProductInfos) {
       groupedCartProductInfo.putIfAbsent(
-          cartProductInfo.getProduct().getProductGroupName(), new ArrayList<>());
+          cartProductInfo.getProduct().getProductGroup().getName(), new ArrayList<>());
       groupedCartProductInfo.compute(
-          cartProductInfo.getProduct().getProductGroupName(),
+          cartProductInfo.getProduct().getProductGroup().getName(),
           (String k, List<CartProductInfo> v) -> {
             v.add(cartProductInfo);
             return v;

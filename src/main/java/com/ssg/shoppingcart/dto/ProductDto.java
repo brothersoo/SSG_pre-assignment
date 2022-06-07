@@ -1,5 +1,6 @@
 package com.ssg.shoppingcart.dto;
 
+import com.ssg.shoppingcart.dto.ProductGroupDto.ProductGroupInfo;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,10 +16,9 @@ public class ProductDto {
     private Integer toPrice;
     private Boolean isInStock;
     private Boolean isOutOfStock;
-    private List<String> groupNames;
+    private List<Long> groupIds;
   }
 
-  @AllArgsConstructor
   @NoArgsConstructor
   @Data
   public static class ProductInfo {
@@ -27,6 +27,24 @@ public class ProductDto {
     private String name;
     private Integer price;
     private Integer stock;
-    private String productGroupName;
+    private ProductGroupInfo productGroup;
+
+    public ProductInfo(Long id, String name, Integer price, Integer stock,
+        Long productGroupId, String productGroupName) {
+      this.id = id;
+      this.name = name;
+      this.price = price;
+      this.stock = stock;
+      this.productGroup = new ProductGroupInfo(productGroupId, productGroupName);
+    }
+  }
+
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Data
+  public static class PriceRangeInGroups {
+
+    private Integer minPrice;
+    private Integer maxPrice;
   }
 }
