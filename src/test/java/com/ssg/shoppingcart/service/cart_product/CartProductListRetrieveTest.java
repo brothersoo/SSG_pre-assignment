@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import com.ssg.shoppingcart.domain.User;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductInfo;
 import com.ssg.shoppingcart.dto.ProductDto.ProductInfo;
+import com.ssg.shoppingcart.dto.ProductGroupDto.ProductGroupInfo;
 import com.ssg.shoppingcart.repository.cartproduct.CartProductRepository;
 import com.ssg.shoppingcart.repository.user.UserRepository;
 import com.ssg.shoppingcart.service.cartproduct.CartProductServiceImpl;
@@ -43,25 +44,31 @@ class CartProductListRetrieveTest {
     List<CartProductInfo> 새벽배송상품리스트 = new ArrayList<>();
     List<CartProductInfo> 택배상품리스트 = new ArrayList<>();
 
+    ProductGroupInfo 쓱배송 = new ProductGroupInfo();
+    쓱배송.setName("쓱배송");
     for (int i = 0; i < 3; i++) {
       ProductInfo product = new ProductInfo();
-      product.setProductGroupName("쓱배송");
+      product.setProductGroup(쓱배송);
       CartProductInfo cartProductInfo = new CartProductInfo();
       cartProductInfo.setProduct(product);
       쓱배송상품리스트.add(cartProductInfo);
     }
 
+    ProductGroupInfo 새벽배송 = new ProductGroupInfo();
+    새벽배송.setName("새벽배송");
     for (int i = 0; i < 5; i++) {
       ProductInfo product = new ProductInfo();
-      product.setProductGroupName("새벽배송");
+      product.setProductGroup(새벽배송);
       CartProductInfo cartProductInfo = new CartProductInfo();
       cartProductInfo.setProduct(product);
       새벽배송상품리스트.add(cartProductInfo);
     }
 
+    ProductGroupInfo 택배 = new ProductGroupInfo();
+    택배.setName("택배");
     for (int i = 0; i < 2; i++) {
       ProductInfo product = new ProductInfo();
-      product.setProductGroupName("택배");
+      product.setProductGroup(택배);
       CartProductInfo cartProductInfo = new CartProductInfo();
       cartProductInfo.setProduct(product);
       택배상품리스트.add(cartProductInfo);
