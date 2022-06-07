@@ -1,6 +1,7 @@
 package com.ssg.shoppingcart.repository.product;
 
 import static com.ssg.shoppingcart.domain.QProduct.product;
+import static com.ssg.shoppingcart.domain.QProductGroup.productGroup;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
@@ -9,6 +10,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssg.shoppingcart.dto.ProductDto.PriceRangeInGroups;
 import com.ssg.shoppingcart.dto.ProductDto.ProductInfo;
 import com.ssg.shoppingcart.dto.ProductDto.ProductListFilter;
 import java.util.List;
@@ -37,14 +39,15 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     } else if (filter.getIsOutOfStock() != null && filter.getIsOutOfStock()) {
       condition.and(product.stock.eq(0));
     }
-    if (filter.getGroupNames() != null) {
-      condition.and(product.productGroup.name.in(filter.getGroupNames()));
+    if (filter.getGroupIds() != null) {
+      condition.and(product.productGroup.id.in(filter.getGroupIds()));
     }
 
     JPAQuery<ProductInfo> query = queryFactory
         .select(Projections.constructor(
             ProductInfo.class,
-            product.id, product.name, product.price, product.stock, product.productGroup.name))
+            product.id, product.name, product.price, product.stock,
+            product.productGroup.id, product.productGroup.name))
         .from(product)
         .join(product.productGroup)
         .where(condition);
@@ -67,5 +70,17 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         .fetchOne();
 
     return new PageImpl(results, pageable, count);
+  }
+
+  @Override
+  public PriceRangeInGroups getMinMaxPriceInProductGroups(List<Long> productGroupIds) {
+    return queryFactory
+        .select(Projections.constructor(
+            PriceRangeInGroups.class, product.price.min(), product.price.max()
+        ))
+        .from(product)
+        .join(product.productGroup, productGroup)
+        .where(product.productGroup.id.in(productGroupIds))
+        .fetchOne();
   }
 }

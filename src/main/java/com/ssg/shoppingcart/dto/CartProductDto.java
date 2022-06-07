@@ -33,11 +33,11 @@ public class CartProductDto {
     private ProductInfo product;
 
     public CartProductInfo(Long id, Integer quantity, Long productId, String productName,
-        Integer productPrice, Integer productStock, String productGroupName) {
+        Integer productPrice, Integer productStock, Long productGroupId, String productGroupName) {
       this.id = id;
       this.quantity = quantity;
       this.product = new ProductInfo(productId, productName,
-          productPrice, productStock, productGroupName);
+          productPrice, productStock, productGroupId, productGroupName);
     }
   }
 }
