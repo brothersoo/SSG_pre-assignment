@@ -3,6 +3,7 @@ package com.ssg.shoppingcart.config;
 import com.ssg.shoppingcart.filter.auth.CustomAuthenticationFilter;
 import com.ssg.shoppingcart.filter.auth.CustomAuthorizationFilter;
 import com.ssg.shoppingcart.util.AuthUtil;
+import com.sun.tools.javac.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
@@ -38,6 +40,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .csrf().disable()
+        .cors().configurationSource(request -> {
+          CorsConfiguration cors = new CorsConfiguration();
+          cors.setAllowedOrigins(List.of("http://localhost:8080"));
+          cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+          cors.setAllowedHeaders(List.of("*"));
+          return cors;
+        })
+        .and()
         .authorizeHttpRequests()
         .antMatchers("/cart_product*").hasAuthority("USE_CART")
         .antMatchers("/order*").hasAuthority("ORDER")
@@ -48,7 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        .addFilter(new CustomAuthenticationFilter(authenticationManagerBean(), authUtil))
+        .addFilter(
+            new CustomAuthenticationFilter(authenticationManagerBean(), authUtil))
         .addFilterBefore(
             new CustomAuthorizationFilter(authUtil), UsernamePasswordAuthenticationFilter.class
         );

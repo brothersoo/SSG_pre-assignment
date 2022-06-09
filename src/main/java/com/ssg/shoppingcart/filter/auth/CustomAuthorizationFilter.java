@@ -34,7 +34,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    if (request.getServletPath().startsWith("/auth")) {
+    if (
+        request.getServletPath().startsWith("/auth")
+            || request.getServletPath().startsWith("/product")
+    ) {
       filterChain.doFilter(request, response);
     } else {
       String token = authUtil.isBearer(request);

@@ -7,7 +7,7 @@ import com.ssg.shoppingcart.domain.auth.Role;
 import com.ssg.shoppingcart.dto.AuthDto.LoginTokens;
 import com.ssg.shoppingcart.dto.AuthDto.RegisterRequest;
 import com.ssg.shoppingcart.dto.UserDto.UserInfo;
-import com.ssg.shoppingcart.repository.auth.AuthRepository;
+import com.ssg.shoppingcart.repository.user.UserRepository;
 import com.ssg.shoppingcart.util.AuthUtil;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,14 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService, UserDetailsService {
 
-  private final AuthRepository authRepository;
+  private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final AuthUtil authUtil;
   private final ModelMapper modelMapper;
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    User user = authRepository.findByEmail(email);
+    User user = userRepository.findByEmail(email);
     if (user == null) {
       throw new UsernameNotFoundException("user not found with the given email");
     }
@@ -58,10 +58,10 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     if (!registerData.getPassword().equals(registerData.getPasswordConfirm())) {
       throw new IllegalArgumentException("password confirm doesn't match");
     }
-    if (authRepository.findByEmail(registerData.getEmail()) != null) {
+    if (userRepository.findByEmail(registerData.getEmail()) != null) {
       throw new IllegalArgumentException("already existing email");
     }
-    if (authRepository.findByUsername(registerData.getUsername()) != null) {
+    if (userRepository.findByUsername(registerData.getUsername()) != null) {
       throw new IllegalArgumentException("already existing username");
     }
     User user = User.builder()
@@ -70,12 +70,12 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         .username(registerData.getUsername())
         .build();
 
-    return modelMapper.map(authRepository.save(user), UserInfo.class);
+    return modelMapper.map(userRepository.save(user), UserInfo.class);
   }
 
   @Override
   public User getUserByEmail(String email) {
-    return authRepository.findByEmail(email);
+    return userRepository.findByEmail(email);
   }
 
   @Override
