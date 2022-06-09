@@ -12,7 +12,6 @@ public class CartProductDto {
   @Data
   public static class CartProductAddRequest {
 
-    private String userEmail;
     private int quantity;
   }
 

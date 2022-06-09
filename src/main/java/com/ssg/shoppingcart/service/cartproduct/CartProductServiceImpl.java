@@ -31,7 +31,7 @@ public class CartProductServiceImpl implements CartProductService {
   public CartProductInfo addProductToCart(String userEmail, Long productId, int quantity) {
     User user = userRepository.findByEmail(userEmail);
     if (user == null) {
-      throw new IllegalArgumentException("no such user found with the given email");
+      throw new IllegalArgumentException("no such user found");
     }
 
     Optional<Product> optionalProduct = productRepository.findById(productId);
@@ -65,7 +65,7 @@ public class CartProductServiceImpl implements CartProductService {
   public Map<String, List<CartProductInfo>> findAllCartProductsForUser(String userEmail) {
     User user = userRepository.findByEmail(userEmail);
     if (user == null) {
-      throw new IllegalArgumentException("no such user found with the given email");
+      throw new IllegalArgumentException("invalid user");
     }
 
     List<CartProductInfo> cartProductInfos = cartProductRepository.findAllByUserEmail(userEmail);
@@ -86,13 +86,18 @@ public class CartProductServiceImpl implements CartProductService {
 
   @Override
   @Transactional
-  public CartProductInfo modifyCartProductQuantity(Long cartProductId, int quantity) {
+  public CartProductInfo modifyCartProductQuantity(
+      Long cartProductId, String userEmail, int quantity
+  ) {
     Optional<CartProduct> optionalCartProduct = cartProductRepository.findById(cartProductId);
     if (!optionalCartProduct.isPresent()) {
       throw new IllegalArgumentException("no such cart product found with the given id");
     }
-
     CartProduct cartProduct = optionalCartProduct.get();
+
+    if (!cartProduct.getUser().getEmail().equals(userEmail)) {
+      throw new IllegalArgumentException("not the owner of the cart product");
+    }
 
     if (quantity <= 0 || quantity > cartProduct.getProduct().getStock()) {
       throw new IllegalArgumentException("invalid quantity");
@@ -103,8 +108,16 @@ public class CartProductServiceImpl implements CartProductService {
   }
 
   @Override
-  public Long deleteCartProductById(Long cartProductId) {
-    cartProductRepository.deleteCartProductById(cartProductId);
+  public Long deleteCartProductById(Long cartProductId, String userEmail) {
+    Optional<CartProduct> optionalCartProduct = cartProductRepository.findById(cartProductId);
+    if (!optionalCartProduct.isPresent()) {
+      throw new IllegalArgumentException("no such cart product");
+    }
+    CartProduct cartProduct = optionalCartProduct.get();
+    if (!cartProduct.getUser().getEmail().equals(userEmail)) {
+      throw new IllegalArgumentException("not the owner of the cart product");
+    }
+    cartProductRepository.delete(cartProduct);
     return cartProductId;
   }
 }
