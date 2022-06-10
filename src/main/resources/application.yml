@@ -25,6 +25,9 @@ jasypt:
   encryptor:
     password: ${JASYPT_PASSWORD}
 
+jwt:
+  secret: ENC(jEFRjFxGtpgwLsJz8NJoa6gI2rdolKz9)
+
 # logging
 logging:
   level:

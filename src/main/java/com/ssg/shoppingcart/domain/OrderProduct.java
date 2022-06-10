@@ -28,22 +28,30 @@ public class OrderProduct extends BaseTimeStampEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name = "price", nullable = false)
+  private Integer price;
+
   @Column(name = "quantity", nullable = false)
   private Integer quantity;
 
-  @OneToOne(targetEntity = Product.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinColumn(name = "ssg_product_id")
-  private Product product;
-
   @ManyToOne(targetEntity = Order.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinColumn(name = "ssg_order_id")
+  @JoinColumn(name = "ssg_order_id", nullable = false)
   @JsonBackReference
   private Order order;
 
+  @OneToOne(targetEntity = Product.class, fetch = FetchType.EAGER)
+  @JoinColumn(name = "ssg_product_id")
+  private Product product;
+
   @Builder
-  public OrderProduct(Integer quantity, Product product, Order order) {
+  public OrderProduct(Integer price, Integer quantity, Order order, Product product) {
+    this.price = price;
     this.quantity = quantity;
-    this.product = product;
     this.order = order;
+    this.product = product;
+  }
+
+  public void refundQuantity() {
+    product.addStock(quantity);
   }
 }

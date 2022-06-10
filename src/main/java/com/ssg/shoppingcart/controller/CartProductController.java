@@ -4,8 +4,10 @@ import com.ssg.shoppingcart.dto.CartProductDto.CartProductAddRequest;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductInfo;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductQuantityModifyRequest;
 import com.ssg.shoppingcart.service.cartproduct.CartProductService;
+import com.ssg.shoppingcart.util.AuthUtil;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,16 +26,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class CartProductController {
 
   private final CartProductService cartProductService;
+  private final AuthUtil authUtil;
 
-  // TODO: change getting user email from request body to JWT
   @PostMapping("/{productId}")
   public ResponseEntity<CartProductInfo> cartProductAdd(
       @PathVariable("productId") Long productId,
+      HttpServletRequest request,
       @RequestBody CartProductAddRequest requestBody
   ) {
+    String token = authUtil.isBearer(request);
+    String userEmail = authUtil.decodeJWT(token).getSubject();
+
     return new ResponseEntity<>(
         cartProductService.addProductToCart(
-            requestBody.getUserEmail(),
+            userEmail,
             productId,
             requestBody.getQuantity()
         ),
@@ -42,11 +47,13 @@ public class CartProductController {
     );
   }
 
-  // TODO: change getting user email from param to JWT
   @GetMapping
   public ResponseEntity<Map<String, List<CartProductInfo>>> cartProductRetrieve(
-      @RequestParam("userEmail") String userEmail
+      HttpServletRequest request
   ) {
+    String token = authUtil.isBearer(request);
+    String userEmail = authUtil.decodeJWT(token).getSubject();
+
     return new ResponseEntity<>(
         cartProductService.findAllCartProductsForUser(userEmail), HttpStatus.OK);
   }
@@ -54,18 +61,30 @@ public class CartProductController {
   @PutMapping("/{cartProductId}")
   public ResponseEntity<CartProductInfo> cartProductQuantityModify(
       @PathVariable("cartProductId") Long cartProductId,
+      HttpServletRequest request,
       @RequestBody CartProductQuantityModifyRequest requestBody
   ) {
+    String token = authUtil.isBearer(request);
+    String userEmail = authUtil.decodeJWT(token).getSubject();
+
     return new ResponseEntity<>(
-        cartProductService.modifyCartProductQuantity(cartProductId, requestBody.getQuantity()),
+        cartProductService.modifyCartProductQuantity(
+            cartProductId, userEmail, requestBody.getQuantity()
+        ),
         HttpStatus.OK
     );
   }
 
   @DeleteMapping("/{cartProductId}")
-  public ResponseEntity<Long> cartProductDelete(@PathVariable("cartProductId") Long cartProductId) {
+  public ResponseEntity<Long> cartProductDelete(
+      @PathVariable("cartProductId") Long cartProductId,
+      HttpServletRequest request
+  ) {
+    String token = authUtil.isBearer(request);
+    String userEmail = authUtil.decodeJWT(token).getSubject();
+
     return new ResponseEntity<>(
-        cartProductService.deleteCartProductById(cartProductId),
+        cartProductService.deleteCartProductById(cartProductId, userEmail),
         HttpStatus.OK
     );
   }

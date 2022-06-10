@@ -1,7 +1,6 @@
 package com.ssg.shoppingcart.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,11 +30,11 @@ public class CartProduct extends BaseTimeStampEntity {
   @Column(name = "quantity", nullable = false)
   private Integer quantity;
 
-  @OneToOne(targetEntity = Product.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToOne(targetEntity = Product.class, fetch = FetchType.EAGER)
   @JoinColumn(name = "ssg_product_id")
   private Product product;
 
-  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_user_id")
   @JsonBackReference
   private User user;
@@ -49,5 +48,13 @@ public class CartProduct extends BaseTimeStampEntity {
 
   public void modifyQuantity(int quantity) {
     this.quantity = quantity;
+  }
+
+  public boolean isOutOfStock() {
+    return quantity > product.getStock();
+  }
+
+  public void orderQuantity() {
+    this.getProduct().subtractStock(quantity);
   }
 }

@@ -49,4 +49,12 @@ public class Product extends BaseTimeStampEntity {
     this.stock = stock;
     this.productGroup = productGroup;
   }
+
+  public void addStock(Integer quantity) {
+    this.stock += quantity;
+  }
+
+  public void subtractStock(Integer quantity) {
+    this.stock -= quantity;
+  }
 }
