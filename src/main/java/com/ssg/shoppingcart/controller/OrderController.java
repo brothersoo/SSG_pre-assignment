@@ -4,10 +4,12 @@ import com.ssg.shoppingcart.dto.OrderDto.OrderCartProducts;
 import com.ssg.shoppingcart.dto.OrderDto.OrderInfo;
 import com.ssg.shoppingcart.service.order.OrderService;
 import com.ssg.shoppingcart.util.AuthUtil;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,7 +37,7 @@ public class OrderController {
     return new ResponseEntity<>(order, HttpStatus.CREATED);
   }
 
-  @PutMapping("{orderId}")
+  @PutMapping("/refund/{orderId}")
   public ResponseEntity<OrderInfo> refund(
       @PathVariable("orderId") Long orderId,
       HttpServletRequest request
@@ -45,5 +47,16 @@ public class OrderController {
 
     OrderInfo order = orderService.refund(orderId, userEmail);
     return new ResponseEntity<>(order, HttpStatus.OK);
+  }
+
+  @GetMapping
+  public ResponseEntity<List<OrderInfo>> orderRetrieve(
+      HttpServletRequest request
+  ) {
+    String token = authUtil.isBearer(request);
+    String userEmail = authUtil.decodeJWT(token).getSubject();
+
+    List<OrderInfo> orderInfos = orderService.findAllOrdersForUser(userEmail);
+    return new ResponseEntity<>(orderInfos, HttpStatus.OK);
   }
 }

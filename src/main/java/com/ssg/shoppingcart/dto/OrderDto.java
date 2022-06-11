@@ -1,5 +1,6 @@
 package com.ssg.shoppingcart.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,8 @@ public class OrderDto {
 
     private Long id;
     private String status;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private List<OrderProductInfo> orderProducts;
   }
 
