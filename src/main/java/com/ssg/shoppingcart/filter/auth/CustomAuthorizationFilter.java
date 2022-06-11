@@ -40,9 +40,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     ) {
       filterChain.doFilter(request, response);
     } else {
-      String token = authUtil.isBearer(request);
-      if (token != null) {
-        try {
+      try {
+        String token = authUtil.isBearer(request);
+        if (token != null) {
           DecodedJWT decodedJWT = authUtil.decodeJWT(token);
           String email = decodedJWT.getSubject();
           String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
@@ -52,18 +52,16 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
           UsernamePasswordAuthenticationToken authenticationToken
               = new UsernamePasswordAuthenticationToken(email, null, authorities);
           SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-          filterChain.doFilter(request, response);
-        } catch (Exception exception) {
-          log.error("Error loggin in: {}", exception.getMessage());
-          response.setHeader("error", exception.getMessage());
-          response.setStatus(HttpStatus.FORBIDDEN.value());
-          Map<String, String> error = new HashMap<>();
-          error.put("error_message", exception.getMessage());
-          response.setContentType(APPLICATION_JSON_VALUE);
-          new ObjectMapper().writeValue(response.getOutputStream(), error);
         }
-      } else {
         filterChain.doFilter(request, response);
+      } catch (Exception exception) {
+        log.error("Error loggin in: {}", exception.getMessage());
+        response.setHeader("error", exception.getMessage());
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        Map<String, String> error = new HashMap<>();
+        error.put("error_message", exception.getMessage());
+        response.setContentType(APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(response.getOutputStream(), error);
       }
     }
   }
