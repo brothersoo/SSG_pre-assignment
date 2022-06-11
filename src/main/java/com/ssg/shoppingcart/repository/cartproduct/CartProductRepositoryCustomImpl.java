@@ -1,6 +1,9 @@
 package com.ssg.shoppingcart.repository.cartproduct;
 
 import static com.ssg.shoppingcart.domain.product.QCartProduct.cartProduct;
+import static com.ssg.shoppingcart.domain.product.QProduct.product;
+import static com.ssg.shoppingcart.domain.product.QProductGroup.productGroup;
+import static com.ssg.shoppingcart.domain.user.QUser.user;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,10 +20,30 @@ public class CartProductRepositoryCustomImpl implements CartProductRepositoryCus
 
   private final JPAQueryFactory queryFactory;
 
+  @Override
+  public CartProduct findByIdFetchProduct(Long cartProductId) {
+    return queryFactory.selectFrom(cartProduct)
+        .join(cartProduct.product, product).fetchJoin()
+        .join(product.productGroup, productGroup).fetchJoin()
+        .where(cartProduct.id.eq(cartProductId))
+        .fetchOne();
+  }
+
+  @Override
+  public List<CartProduct> findAllByIdFetchProduct(List<Long> cartProductIds) {
+    return queryFactory.selectFrom(cartProduct)
+        .join(cartProduct.product, product).fetchJoin()
+        .join(product.productGroup, productGroup).fetchJoin()
+        .where(cartProduct.id.in(cartProductIds))
+        .fetch();
+  }
+
+  @Override
   public CartProduct findByUserAndProduct(Long userId, Long productId) {
     return queryFactory.selectFrom(cartProduct)
-        .join(cartProduct.user).fetchJoin()
-        .join(cartProduct.product).fetchJoin()
+        .join(cartProduct.user, user)
+        .join(cartProduct.product, product).fetchJoin()
+        .join(product.productGroup, productGroup).fetchJoin()
         .where(cartProduct.user.id.eq(userId), cartProduct.product.id.eq(productId))
         .fetchOne();
   }

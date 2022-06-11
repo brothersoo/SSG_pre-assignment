@@ -29,12 +29,12 @@ public class UserRole extends BaseTimeStampEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_user_id")
   @JsonBackReference
   private User user;
 
-  @ManyToOne(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @ManyToOne(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_role_id")
   @JsonBackReference
   private Role role;

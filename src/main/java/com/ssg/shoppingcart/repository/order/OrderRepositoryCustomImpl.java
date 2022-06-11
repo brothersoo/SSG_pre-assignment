@@ -22,12 +22,9 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
   public List<Order> findAllOrdersByUserEmail(String userEmail) {
     return queryFactory
         .selectFrom(order).distinct()
-        .join(order.orderProducts, orderProduct)
-        .fetchJoin()
-        .join(orderProduct.product, product)
-        .fetchJoin()
-        .join(product.productGroup, productGroup)
-        .fetchJoin()
+        .join(order.orderProducts, orderProduct).fetchJoin()
+        .join(orderProduct.product, product).fetchJoin()
+        .join(product.productGroup, productGroup).fetchJoin()
         .join(order.user, user)
         .where(user.email.eq(userEmail))
         .orderBy(order.createdAt.desc())

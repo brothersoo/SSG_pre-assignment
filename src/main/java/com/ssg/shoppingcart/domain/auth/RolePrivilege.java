@@ -28,12 +28,12 @@ public class RolePrivilege extends BaseTimeStampEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @ManyToOne(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_role_id")
   @JsonBackReference
   private Role role;
 
-  @ManyToOne(targetEntity = Privilege.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @ManyToOne(targetEntity = Privilege.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_privilege_id")
   @JsonBackReference
   private Privilege privilege;

@@ -44,7 +44,7 @@ public class Order extends BaseTimeStampEntity {
   @JsonBackReference
   private User user;
 
-  @OneToMany(targetEntity = OrderProduct.class, mappedBy = "order", fetch = FetchType.EAGER)
+  @OneToMany(targetEntity = OrderProduct.class, mappedBy = "order", fetch = FetchType.LAZY)
   @JsonManagedReference
   private Set<OrderProduct> orderProducts;
 

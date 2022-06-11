@@ -41,7 +41,7 @@ public class OrderProduct extends BaseTimeStampEntity {
   @JsonBackReference
   private Order order;
 
-  @OneToOne(targetEntity = Product.class, fetch = FetchType.EAGER)
+  @OneToOne(targetEntity = Product.class, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_product_id")
   private Product product;
 

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -42,11 +41,11 @@ public class CartProductServiceImpl implements CartProductService {
   @Override
   @Transactional(readOnly = true)
   public CartProduct findByIdAndValidate(Long cartProductId) {
-    Optional<CartProduct> optionalCartProduct = cartProductRepository.findById(cartProductId);
-    if (!optionalCartProduct.isPresent()) {
+    CartProduct cartProduct = cartProductRepository.findByIdFetchProduct(cartProductId);
+    if (cartProduct == null) {
       throw new IllegalArgumentException("no such cart product found with the given id");
     }
-    return optionalCartProduct.get();
+    return cartProduct;
   }
 
   /**

@@ -32,7 +32,7 @@ public class CartProduct extends BaseTimeStampEntity {
   @Column(name = "quantity", nullable = false)
   private Integer quantity;
 
-  @OneToOne(targetEntity = Product.class, fetch = FetchType.EAGER)
+  @OneToOne(targetEntity = Product.class, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_product_id")
   private Product product;
 

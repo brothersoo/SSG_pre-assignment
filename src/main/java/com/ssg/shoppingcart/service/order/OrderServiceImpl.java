@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
   @Override
   @Transactional
   public OrderInfo order(List<Long> cartProductIds, User user) {
-    List<CartProduct> cartProducts = cartProductRepository.findAllById(cartProductIds);
+    List<CartProduct> cartProducts = cartProductRepository.findAllByIdFetchProduct(cartProductIds);
     Set<OrderProduct> orderProducts = new HashSet<>();
 
     Order order = Order.builder().status(COMPLETED).user(user).build();
