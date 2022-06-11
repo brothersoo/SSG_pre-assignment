@@ -1,13 +1,13 @@
 package com.ssg.shoppingcart.repository.order;
 
-import static com.ssg.shoppingcart.domain.QOrder.order;
-import static com.ssg.shoppingcart.domain.QOrderProduct.orderProduct;
-import static com.ssg.shoppingcart.domain.QProduct.product;
-import static com.ssg.shoppingcart.domain.QProductGroup.productGroup;
-import static com.ssg.shoppingcart.domain.QUser.user;
+import static com.ssg.shoppingcart.domain.order.QOrder.order;
+import static com.ssg.shoppingcart.domain.product.QOrderProduct.orderProduct;
+import static com.ssg.shoppingcart.domain.product.QProduct.product;
+import static com.ssg.shoppingcart.domain.product.QProductGroup.productGroup;
+import static com.ssg.shoppingcart.domain.user.QUser.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssg.shoppingcart.domain.Order;
+import com.ssg.shoppingcart.domain.order.Order;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

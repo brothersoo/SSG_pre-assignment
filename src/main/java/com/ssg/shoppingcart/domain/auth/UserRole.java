@@ -2,7 +2,7 @@ package com.ssg.shoppingcart.domain.auth;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ssg.shoppingcart.domain.BaseTimeStampEntity;
-import com.ssg.shoppingcart.domain.User;
+import com.ssg.shoppingcart.domain.user.User;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

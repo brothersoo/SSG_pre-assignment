@@ -36,21 +36,19 @@ public class AuthUtil {
         .sign(AuthUtil.getAlgorithm());
   }
 
-  public String generateAccessToken(
-      String subject, List<String> roles, String issuer, Date expireDate
-  ) {
+  public String generateAccessToken(String subject, List<String> roles, String issuer) {
     return JWT.create()
         .withSubject(subject)
-        .withExpiresAt(expireDate)
+        .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
         .withIssuer(issuer)
         .withClaim("roles", roles)
         .sign(AuthUtil.getAlgorithm());
   }
 
-  public String generateRefreshToken(String subject, String issuer, Date expireDate) {
+  public String generateRefreshToken(String subject, String issuer) {
     return JWT.create()
         .withSubject(subject)
-        .withExpiresAt(expireDate)
+        .withExpiresAt(new Date(System.currentTimeMillis() + 20 * 24 * 60 * 60 * 1000))
         .withIssuer(issuer)
         .sign(AuthUtil.getAlgorithm());
   }

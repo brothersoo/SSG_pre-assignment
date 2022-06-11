@@ -33,7 +33,7 @@ public class ProductController {
   }
 
   @GetMapping("/price_range")
-  public ResponseEntity<PriceRangeInGroups> PriceRangeInGroupsRetrieve(
+  public ResponseEntity<PriceRangeInGroups> priceRangeInGroupsRetrieve(
       @RequestParam("groupIds") List<Long> groupIds
   ) {
     return new ResponseEntity<>(

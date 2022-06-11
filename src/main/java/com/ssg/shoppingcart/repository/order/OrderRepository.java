@@ -1,6 +1,6 @@
 package com.ssg.shoppingcart.repository.order;
 
-import com.ssg.shoppingcart.domain.Order;
+import com.ssg.shoppingcart.domain.order.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, Long>, OrderRepositoryCustom {

@@ -6,17 +6,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.ssg.shoppingcart.domain.User;
+import com.ssg.shoppingcart.domain.user.User;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductInfo;
 import com.ssg.shoppingcart.dto.ProductDto.ProductInfo;
 import com.ssg.shoppingcart.dto.ProductGroupDto.ProductGroupInfo;
 import com.ssg.shoppingcart.repository.cartproduct.CartProductRepository;
-import com.ssg.shoppingcart.repository.user.UserRepository;
 import com.ssg.shoppingcart.service.cartproduct.CartProductServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,10 +23,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class CartProductListRetrieveTest {
+class CartProductListTest {
 
-  @Mock
-  UserRepository userRepository;
   @Mock
   CartProductRepository cartProductRepository;
   @InjectMocks
@@ -79,30 +75,16 @@ class CartProductListRetrieveTest {
     allCartProducts.addAll(새벽배송상품리스트);
     allCartProducts.addAll(택배상품리스트);
 
-    when(userRepository.findByEmail(userEmail)).thenReturn(user);
     when(cartProductRepository.findAllByUserEmail(userEmail)).thenReturn(allCartProducts);
 
     Map<String, List<CartProductInfo>> groupedCartProductInfos
-        = cartProductService.findAllCartProductsForUser(userEmail);
+        = cartProductService.findAllCartProductsForUser(user);
 
     assertThat(groupedCartProductInfos.size()).isEqualTo(3);
     assertThat(groupedCartProductInfos.get("쓱배송")).isEqualTo(쓱배송상품리스트);
     assertThat(groupedCartProductInfos.get("새벽배송")).isEqualTo(새벽배송상품리스트);
     assertThat(groupedCartProductInfos.get("택배")).isEqualTo(택배상품리스트);
 
-    verify(userRepository, times(1)).findByEmail(anyString());
     verify(cartProductRepository, times(1)).findAllByUserEmail(anyString());
-  }
-
-  @Test
-  @DisplayName("알 수 없는 사용자 에러 테스트")
-  void noSuchUserTest() {
-    when(userRepository.findByEmail(anyString())).thenReturn(null);
-
-    Assertions.assertThrows(IllegalArgumentException.class,
-        () -> cartProductService.findAllCartProductsForUser(anyString()));
-
-    verify(userRepository, times(1)).findByEmail(anyString());
-    verify(cartProductRepository, times(0)).findAllByUserEmail(anyString());
   }
 }

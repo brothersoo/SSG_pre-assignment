@@ -1,6 +1,6 @@
 package com.ssg.shoppingcart.repository.order;
 
-import com.ssg.shoppingcart.domain.Order;
+import com.ssg.shoppingcart.domain.order.Order;
 import java.util.List;
 
 public interface OrderRepositoryCustom {

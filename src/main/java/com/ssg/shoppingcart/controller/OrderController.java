@@ -1,9 +1,10 @@
 package com.ssg.shoppingcart.controller;
 
+import com.ssg.shoppingcart.domain.user.User;
 import com.ssg.shoppingcart.dto.OrderDto.OrderCartProducts;
 import com.ssg.shoppingcart.dto.OrderDto.OrderInfo;
+import com.ssg.shoppingcart.service.auth.AuthService;
 import com.ssg.shoppingcart.service.order.OrderService;
-import com.ssg.shoppingcart.util.AuthUtil;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
   private final OrderService orderService;
-  private final AuthUtil authUtil;
+  private final AuthService authService;
 
   @PostMapping
   public ResponseEntity<OrderInfo> order(
       HttpServletRequest request,
       @RequestBody OrderCartProducts orderCartProducts
   ) {
-    String token = authUtil.isBearer(request);
-    String userEmail = authUtil.decodeJWT(token).getSubject();
+    User user = authService.findUserByHttpRequest(request);
 
-    OrderInfo order = orderService.order(orderCartProducts.getCartProductIds(), userEmail);
+    OrderInfo order = orderService.order(orderCartProducts.getCartProductIds(), user);
     return new ResponseEntity<>(order, HttpStatus.CREATED);
   }
 
@@ -42,10 +42,9 @@ public class OrderController {
       @PathVariable("orderId") Long orderId,
       HttpServletRequest request
   ) {
-    String token = authUtil.isBearer(request);
-    String userEmail = authUtil.decodeJWT(token).getSubject();
+    User user = authService.findUserByHttpRequest(request);
 
-    OrderInfo order = orderService.refund(orderId, userEmail);
+    OrderInfo order = orderService.refund(orderId, user);
     return new ResponseEntity<>(order, HttpStatus.OK);
   }
 
@@ -53,10 +52,9 @@ public class OrderController {
   public ResponseEntity<List<OrderInfo>> orderRetrieve(
       HttpServletRequest request
   ) {
-    String token = authUtil.isBearer(request);
-    String userEmail = authUtil.decodeJWT(token).getSubject();
+    User user = authService.findUserByHttpRequest(request);
 
-    List<OrderInfo> orderInfos = orderService.findAllOrdersForUser(userEmail);
+    List<OrderInfo> orderInfos = orderService.findAllOrdersForUser(user);
     return new ResponseEntity<>(orderInfos, HttpStatus.OK);
   }
 }

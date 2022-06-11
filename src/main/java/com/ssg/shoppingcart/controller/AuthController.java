@@ -29,7 +29,7 @@ public class AuthController {
   private final AuthService authService;
 
   @PostMapping("/register")
-  public ResponseEntity<UserInfo> UserRegister(@RequestBody RegisterRequest registerData) {
+  public ResponseEntity<UserInfo> userRegister(@RequestBody RegisterRequest registerData) {
     UserInfo user = authService.register(registerData);
     return new ResponseEntity<>(user, HttpStatus.CREATED);
   }

@@ -1,10 +1,11 @@
 package com.ssg.shoppingcart.controller;
 
+import com.ssg.shoppingcart.domain.user.User;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductAddRequest;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductInfo;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductQuantityModifyRequest;
+import com.ssg.shoppingcart.service.auth.AuthService;
 import com.ssg.shoppingcart.service.cartproduct.CartProductService;
-import com.ssg.shoppingcart.util.AuthUtil;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CartProductController {
 
   private final CartProductService cartProductService;
-  private final AuthUtil authUtil;
+  private final AuthService authService;
 
   @PostMapping("/{productId}")
   public ResponseEntity<CartProductInfo> cartProductAdd(
@@ -34,12 +35,11 @@ public class CartProductController {
       HttpServletRequest request,
       @RequestBody CartProductAddRequest requestBody
   ) {
-    String token = authUtil.isBearer(request);
-    String userEmail = authUtil.decodeJWT(token).getSubject();
+    User user = authService.findUserByHttpRequest(request);
 
     return new ResponseEntity<>(
         cartProductService.addProductToCart(
-            userEmail,
+            user,
             productId,
             requestBody.getQuantity()
         ),
@@ -51,11 +51,10 @@ public class CartProductController {
   public ResponseEntity<Map<String, List<CartProductInfo>>> cartProductRetrieve(
       HttpServletRequest request
   ) {
-    String token = authUtil.isBearer(request);
-    String userEmail = authUtil.decodeJWT(token).getSubject();
+    User user = authService.findUserByHttpRequest(request);
 
     return new ResponseEntity<>(
-        cartProductService.findAllCartProductsForUser(userEmail), HttpStatus.OK);
+        cartProductService.findAllCartProductsForUser(user), HttpStatus.OK);
   }
 
   @PutMapping("/{cartProductId}")
@@ -64,12 +63,11 @@ public class CartProductController {
       HttpServletRequest request,
       @RequestBody CartProductQuantityModifyRequest requestBody
   ) {
-    String token = authUtil.isBearer(request);
-    String userEmail = authUtil.decodeJWT(token).getSubject();
+    User user = authService.findUserByHttpRequest(request);
 
     return new ResponseEntity<>(
         cartProductService.modifyCartProductQuantity(
-            cartProductId, userEmail, requestBody.getQuantity()
+            cartProductId, user, requestBody.getQuantity()
         ),
         HttpStatus.OK
     );
@@ -80,11 +78,10 @@ public class CartProductController {
       @PathVariable("cartProductId") Long cartProductId,
       HttpServletRequest request
   ) {
-    String token = authUtil.isBearer(request);
-    String userEmail = authUtil.decodeJWT(token).getSubject();
+    User user = authService.findUserByHttpRequest(request);
 
     return new ResponseEntity<>(
-        cartProductService.deleteCartProductById(cartProductId, userEmail),
+        cartProductService.deleteCartProductById(cartProductId, user),
         HttpStatus.OK
     );
   }

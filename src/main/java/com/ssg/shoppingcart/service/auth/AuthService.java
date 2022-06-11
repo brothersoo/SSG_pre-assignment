@@ -1,6 +1,6 @@
 package com.ssg.shoppingcart.service.auth;
 
-import com.ssg.shoppingcart.domain.User;
+import com.ssg.shoppingcart.domain.user.User;
 import com.ssg.shoppingcart.domain.auth.Privilege;
 import com.ssg.shoppingcart.domain.auth.Role;
 import com.ssg.shoppingcart.dto.AuthDto.LoginTokens;
@@ -10,17 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface AuthService {
 
-  UserInfo register(RegisterRequest registerData);
+  User findUserByEmailAndValidate(String userEmail);
 
-  User getUserByEmail(String email);
+  User findUserByHttpRequest(HttpServletRequest request);
+
+  UserInfo register(RegisterRequest registerData);
 
   LoginTokens refreshToken(HttpServletRequest request);
 
   Role saveRole(String roleName);
 
-  void GrantRoleToUser(String email, String roleName);
+  void grantRoleToUser(String email, String roleName);
 
   Privilege savePrivilege(String privilegeName);
 
-  void GrantPrivilegeToRole(String roleName, String privilegeName);
+  void grantPrivilegeToRole(String roleName, String privilegeName);
 }

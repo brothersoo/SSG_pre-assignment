@@ -1,16 +1,20 @@
 package com.ssg.shoppingcart.service.cartproduct;
 
+import com.ssg.shoppingcart.domain.product.CartProduct;
+import com.ssg.shoppingcart.domain.user.User;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductInfo;
 import java.util.List;
 import java.util.Map;
 
 public interface CartProductService {
 
-  CartProductInfo addProductToCart(String userEmail, Long productId, int quantity);
+  CartProduct findByIdAndValidate(Long cartProductId);
 
-  Map<String, List<CartProductInfo>> findAllCartProductsForUser(String userEmail);
+  CartProductInfo addProductToCart(User user, Long productId, int quantity);
 
-  CartProductInfo modifyCartProductQuantity(Long cartProductId, String userEmail, int quantity);
+  Map<String, List<CartProductInfo>> findAllCartProductsForUser(User user);
 
-  Long deleteCartProductById(Long cartProductId, String UserEmail);
+  CartProductInfo modifyCartProductQuantity(Long cartProductId, User user, int quantity);
+
+  Long deleteCartProductById(Long cartProductId, User user);
 }

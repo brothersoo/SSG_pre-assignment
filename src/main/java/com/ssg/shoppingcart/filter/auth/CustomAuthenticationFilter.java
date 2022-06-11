@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssg.shoppingcart.dto.AuthDto.LoginTokens;
 import com.ssg.shoppingcart.util.AuthUtil;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
@@ -55,11 +54,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         .map(GrantedAuthority::getAuthority)
         .collect(Collectors.toList());
     String issuer = request.getRequestURL().toString();
-    Date accessExpireDate = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
-    Date refreshExpireDate = new Date(System.currentTimeMillis() + 20 * 24 * 60 * 60 * 1000);
     String accessToken
-        = authUtil.generateAccessToken(subject, roles, issuer, accessExpireDate);
-    String refreshToken = authUtil.generateRefreshToken(subject, issuer, refreshExpireDate);
+        = authUtil.generateAccessToken(subject, roles, issuer);
+    String refreshToken = authUtil.generateRefreshToken(subject, issuer);
     LoginTokens tokens = new LoginTokens(accessToken, refreshToken);
     response.setContentType(APPLICATION_JSON_VALUE);
     new ObjectMapper().writeValue(response.getOutputStream(), tokens);

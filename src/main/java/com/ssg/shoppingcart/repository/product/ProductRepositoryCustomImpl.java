@@ -1,7 +1,7 @@
 package com.ssg.shoppingcart.repository.product;
 
-import static com.ssg.shoppingcart.domain.QProduct.product;
-import static com.ssg.shoppingcart.domain.QProductGroup.productGroup;
+import static com.ssg.shoppingcart.domain.product.QProduct.product;
+import static com.ssg.shoppingcart.domain.product.QProductGroup.productGroup;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;

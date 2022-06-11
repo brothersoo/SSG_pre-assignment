@@ -1,10 +1,10 @@
 package com.ssg.shoppingcart.repository.cartproduct;
 
-import static com.ssg.shoppingcart.domain.QCartProduct.cartProduct;
+import static com.ssg.shoppingcart.domain.product.QCartProduct.cartProduct;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssg.shoppingcart.domain.CartProduct;
+import com.ssg.shoppingcart.domain.product.CartProduct;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductInfo;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

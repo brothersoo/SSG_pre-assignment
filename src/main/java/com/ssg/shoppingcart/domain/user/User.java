@@ -1,7 +1,10 @@
-package com.ssg.shoppingcart.domain;
+package com.ssg.shoppingcart.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ssg.shoppingcart.domain.BaseTimeStampEntity;
+import com.ssg.shoppingcart.domain.product.CartProduct;
 import com.ssg.shoppingcart.domain.auth.UserRole;
+import com.ssg.shoppingcart.domain.order.Order;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
