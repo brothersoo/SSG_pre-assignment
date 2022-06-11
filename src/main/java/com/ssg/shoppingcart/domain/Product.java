@@ -36,7 +36,7 @@ public class Product extends BaseTimeStampEntity {
   @Column(name = "stock", nullable = false)
   private Integer stock;
 
-  @ManyToOne(targetEntity = ProductGroup.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToOne(targetEntity = ProductGroup.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinColumn(name = "ssg_product_group_id")
   @JsonBackReference
   private ProductGroup productGroup;

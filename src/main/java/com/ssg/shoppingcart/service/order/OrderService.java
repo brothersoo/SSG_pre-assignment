@@ -8,4 +8,6 @@ public interface OrderService {
   OrderInfo order(List<Long> cartProductIds, String userEmail);
 
   OrderInfo refund(Long orderId, String userEmail);
+
+  List<OrderInfo> findAllOrdersForUser(String userEmail);
 }

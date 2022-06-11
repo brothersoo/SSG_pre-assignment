@@ -2,7 +2,7 @@ package com.ssg.shoppingcart.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,16 +43,16 @@ public class Order extends BaseTimeStampEntity {
 
   @OneToMany(targetEntity = OrderProduct.class, mappedBy = "order", fetch = FetchType.EAGER)
   @JsonManagedReference
-  private List<OrderProduct> orderProducts;
+  private Set<OrderProduct> orderProducts;
 
   @Builder
-  public Order(User user, OrderStatus status, List<OrderProduct> orderProducts) {
+  public Order(User user, OrderStatus status, Set<OrderProduct> orderProducts) {
     this.user = user;
     this.status = status;
     this.orderProducts = orderProducts;
   }
 
-  public void setOrderProducts(List<OrderProduct> orderProducts) {
+  public void setOrderProducts(Set<OrderProduct> orderProducts) {
     this.orderProducts = orderProducts;
   }
 
