@@ -93,6 +93,8 @@ public class CartProductServiceImpl implements CartProductService {
         = cartProductRepository.findAllByUserEmail(user.getEmail());
     Map<String, List<CartProductInfo>> groupedCartProductInfo = new HashMap<>();
     for (CartProductInfo cartProductInfo : cartProductInfos) {
+      cartProductValidator.validateIsInStock(cartProductInfo);
+
       groupedCartProductInfo.putIfAbsent(
           cartProductInfo.getProduct().getProductGroup().getName(),
           new ArrayList<>()
@@ -143,5 +145,42 @@ public class CartProductServiceImpl implements CartProductService {
     cartProductValidator.validateOwner(cartProduct, user);
     cartProductRepository.delete(cartProduct);
     return cartProductId;
+  }
+
+  @Override
+  public List<Long> handleCartProductQuantityExceededStock(String type, User user) {
+    List<Long> cartProductQuantityExceededStockIds = new ArrayList<>();
+    if (type.equals("reset")) {
+      resetCartProductQuantityExceededStock(user, cartProductQuantityExceededStockIds);
+    } else if (type.equals("remove")) {
+      removeCartProductQuantityExceededStock(user, cartProductQuantityExceededStockIds);
+    }
+    return cartProductQuantityExceededStockIds;
+  }
+
+  @Override
+  public void resetCartProductQuantityExceededStock(User user, List<Long> cartProductIds) {
+    List<CartProduct> cartProducts
+        = cartProductRepository.findQuantityExceededStockFetchProduct(user.getId());
+    for (CartProduct cartProduct : cartProducts) {
+      cartProductValidator.validateOwner(cartProduct, user);
+      cartProductIds.add(cartProduct.getId());
+      if (cartProduct.isInStock()) {
+        cartProduct.modifyQuantity(cartProduct.getProduct().getStock());
+      } else {
+        cartProductRepository.delete(cartProduct);
+      }
+    }
+  }
+
+  @Override
+  public void removeCartProductQuantityExceededStock(User user, List<Long> cartProductIds) {
+    List<CartProduct> cartProducts
+        = cartProductRepository.findQuantityExceededStockFetchProduct(user.getId());
+    for (CartProduct cartProduct : cartProducts) {
+      cartProductValidator.validateOwner(cartProduct, user);
+      cartProductIds.add(cartProduct.getId());
+    }
+    cartProductRepository.deleteAll(cartProducts);
   }
 }

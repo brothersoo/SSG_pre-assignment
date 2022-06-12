@@ -12,7 +12,6 @@ import com.ssg.shoppingcart.dto.CartProductDto.CartProductInfo;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -65,9 +64,22 @@ public class CartProductRepositoryCustomImpl implements CartProductRepositoryCus
   }
 
   @Override
-  @Transactional
   public Long deleteCartProductById(Long id) {
     queryFactory.delete(cartProduct).where(cartProduct.id.eq(id)).execute();
     return id;
+  }
+
+  @Override
+  public List<CartProduct> findQuantityExceededStockFetchProduct(Long userId) {
+    return queryFactory
+        .selectFrom(cartProduct).distinct()
+        .join(cartProduct.product, product)
+        .fetchJoin()
+        .join(cartProduct.user, user)
+        .where(
+            user.id.in(userId),
+            cartProduct.quantity.gt(cartProduct.product.stock)
+        )
+        .fetch();
   }
 }

@@ -52,11 +52,15 @@ public class CartProduct extends BaseTimeStampEntity {
     this.quantity = quantity;
   }
 
-  public boolean isOutOfStock() {
+  public boolean isOrderableQuantity() {
     return quantity > product.getStock();
   }
 
   public void orderQuantity() {
     this.getProduct().subtractStock(quantity);
+  }
+
+  public boolean isInStock() {
+    return product.isInStock();
   }
 }

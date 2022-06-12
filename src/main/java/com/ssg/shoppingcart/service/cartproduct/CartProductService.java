@@ -17,4 +17,10 @@ public interface CartProductService {
   CartProductInfo modifyCartProductQuantity(Long cartProductId, User user, int quantity);
 
   Long deleteCartProductById(Long cartProductId, User user);
+
+  List<Long> handleCartProductQuantityExceededStock(String type, User user);
+
+  void resetCartProductQuantityExceededStock(User user, List<Long> cartProductIds);
+
+  void removeCartProductQuantityExceededStock(User user, List<Long> cartProductIds);
 }

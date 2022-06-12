@@ -4,6 +4,7 @@ import com.ssg.shoppingcart.domain.user.User;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductAddRequest;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductInfo;
 import com.ssg.shoppingcart.dto.CartProductDto.CartProductQuantityModifyRequest;
+import com.ssg.shoppingcart.dto.CartProductDto.QuantityResetRequest;
 import com.ssg.shoppingcart.service.auth.AuthService;
 import com.ssg.shoppingcart.service.cartproduct.CartProductService;
 import java.util.List;
@@ -84,5 +85,20 @@ public class CartProductController {
         cartProductService.deleteCartProductById(cartProductId, user),
         HttpStatus.OK
     );
+  }
+
+  @PutMapping("/reset_in_stock")
+  public ResponseEntity<List<Long>> cartProductQuantityExceedingStockHandle(
+      HttpServletRequest request,
+      @RequestBody QuantityResetRequest quantityResetRequest
+  ) {
+    User user = authService.findUserByHttpRequest(request);
+
+    List<Long> cartProductIds
+        = cartProductService.handleCartProductQuantityExceededStock(
+        quantityResetRequest.getType(),
+        user
+    );
+    return new ResponseEntity<>(cartProductIds, HttpStatus.OK);
   }
 }

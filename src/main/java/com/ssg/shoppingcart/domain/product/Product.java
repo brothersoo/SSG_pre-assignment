@@ -58,4 +58,8 @@ public class Product extends BaseTimeStampEntity {
   public void subtractStock(Integer quantity) {
     this.stock -= quantity;
   }
+
+  public boolean isInStock() {
+    return stock > 0;
+  }
 }

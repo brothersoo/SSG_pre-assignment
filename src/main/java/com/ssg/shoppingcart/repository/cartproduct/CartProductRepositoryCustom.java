@@ -15,4 +15,6 @@ public interface CartProductRepositoryCustom {
   List<CartProductInfo> findAllByUserEmail(String email);
 
   Long deleteCartProductById(Long id);
+
+  List<CartProduct> findQuantityExceededStockFetchProduct(Long userId);
 }

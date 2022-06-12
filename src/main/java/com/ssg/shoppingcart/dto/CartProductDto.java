@@ -38,5 +38,17 @@ public class CartProductDto {
       this.product = new ProductInfo(productId, productName,
           productPrice, productStock, productGroupId, productGroupName);
     }
+
+    public boolean isOrderableQuantity() {
+      return quantity > product.getStock();
+    }
+  }
+
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Data
+  public static class QuantityResetRequest {
+
+    private String type;
   }
 }

@@ -1,6 +1,7 @@
 package com.ssg.shoppingcart.util;
 
 import com.ssg.shoppingcart.exception.auth.AuthException;
+import com.ssg.shoppingcart.exception.order.ProductOutOfStockException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,13 @@ public class ControllerExceptionHandler {
     log.info(ex.getClass().getName());
     log.error("error", ex);
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+  }
+
+  @ExceptionHandler(ProductOutOfStockException.class)
+  public ResponseEntity<Object> handleProductOutOfStockException(ProductOutOfStockException ex) {
+    log.info(ex.getClass().getName());
+    log.error("error", ex);
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
   }
 
   @ExceptionHandler(Exception.class)
