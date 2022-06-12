@@ -22,6 +22,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * 사용자 인가 처리에 사용되는 필터
+ */
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
@@ -31,6 +34,15 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     this.authUtil = authUtil;
   }
 
+  /**
+   * 인가가 필요한 path는 서비스를 요청한 token에 포함된 role을 검사 후 올바를 권한이 있는지 필터링 진행
+   *
+   * @param request
+   * @param response
+   * @param filterChain
+   * @throws ServletException
+   * @throws IOException
+   */
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {

@@ -18,6 +18,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 장바구니에 담긴 상품 엔티티
+ */
 @Entity
 @Table(name = "ssg_cart_product")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

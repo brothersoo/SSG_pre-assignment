@@ -13,12 +13,19 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+/**
+ * 장바구니 상품 리포지토리
+ */
 @Repository
 @RequiredArgsConstructor
 public class CartProductRepositoryCustomImpl implements CartProductRepositoryCustom {
 
   private final JPAQueryFactory queryFactory;
 
+  /**
+   * 장바구니 상품을 id로 검색
+   * 연관된 상품을 fetch join
+   */
   @Override
   public CartProduct findByIdFetchProduct(Long cartProductId) {
     return queryFactory.selectFrom(cartProduct)
@@ -28,6 +35,10 @@ public class CartProductRepositoryCustomImpl implements CartProductRepositoryCus
         .fetchOne();
   }
 
+  /**
+   * 장바구니 상품을 id list로 검색
+   * 연관된 상품을 fetch join
+   */
   @Override
   public List<CartProduct> findAllByIdFetchProduct(List<Long> cartProductIds) {
     return queryFactory.selectFrom(cartProduct)
@@ -37,6 +48,10 @@ public class CartProductRepositoryCustomImpl implements CartProductRepositoryCus
         .fetch();
   }
 
+  /**
+   * 유저의 장바구니 내 상품 중 주어진 상품 id에 해당하는 장바구니 상품 검색
+   * 연관된 상품, 상품 그룹을 fetch join
+   */
   @Override
   public CartProduct findByUserAndProduct(Long userId, Long productId) {
     return queryFactory.selectFrom(cartProduct)
@@ -47,6 +62,9 @@ public class CartProductRepositoryCustomImpl implements CartProductRepositoryCus
         .fetchOne();
   }
 
+  /**
+   * 사용자의 장바구니 상품을 모두 검색
+   */
   @Override
   public List<CartProductInfo> findAllByUserEmail(String email) {
     return queryFactory

@@ -17,6 +17,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Role과 Privilege 간 Many-to-Many 관계 엔티티
+ */
 @Entity
 @Table(name = "ssg_role_privilege")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

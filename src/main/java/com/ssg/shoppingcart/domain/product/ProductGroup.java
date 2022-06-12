@@ -16,6 +16,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 상품 그룹 엔티티
+ */
 @Entity
 @Table(name = "ssg_product_group")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -15,6 +15,9 @@ public class RoleServiceImpl implements RoleService {
   private final RoleRepository roleRepository;
   private final UserRoleRepository userRoleRepository;
 
+  /**
+   * 이름에 해당하는 Role을 반환합니다.
+   */
   @Override
   public Role findRoleByName(String roleName) {
     Role role = roleRepository.findByName("ROLE_" + roleName);
@@ -24,6 +27,9 @@ public class RoleServiceImpl implements RoleService {
     return role;
   }
 
+  /**
+   * 지정한 사용자에게 role을 부여합니다.
+   */
   @Override
   public Long grantRoleToUser(User user, String roleName) {
     Role role = findRoleByName(roleName);

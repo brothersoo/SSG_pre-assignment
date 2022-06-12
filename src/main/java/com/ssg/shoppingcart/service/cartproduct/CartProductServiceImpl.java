@@ -34,9 +34,6 @@ public class CartProductServiceImpl implements CartProductService {
   /**
    * id를 사용하여 장바구니 상품을 검색합니다.<br/>
    * id에 해당하는 장바구니 상품이 없을 시 에러를 발생합니다.
-   *
-   * @param cartProductId
-   * @return
    */
   @Override
   @Transactional(readOnly = true)
@@ -55,11 +52,6 @@ public class CartProductServiceImpl implements CartProductService {
    * <p>
    * 장바구니에 없는 상품일 경우 새로 추가합니다.<br/>
    * 수량이 재고 이하인지 검증합니다.
-   *
-   * @param user
-   * @param productId
-   * @param quantity
-   * @return
    */
   @Override
   public CartProductInfo addProductToCart(User user, Long productId, int quantity) {
@@ -82,9 +74,6 @@ public class CartProductServiceImpl implements CartProductService {
   /**
    * 사용자의 장바구니에 담겨있는 모든 상품을 반환합니다.<br/>
    * 상품 그룹별로 묶어 반환합니다.
-   *
-   * @param user
-   * @return
    */
   @Override
   @Transactional(readOnly = true)
@@ -114,11 +103,6 @@ public class CartProductServiceImpl implements CartProductService {
    * 장바구니의 상품 수량을 수정하는 로직입니다.<br/>
    * 장바구니 상품이 요청한 사용자의 장바구니에 담긴 상품인지 검증합니다.<br/>
    * 수정 할 수량이 상품의 재고 내의 범위인지 검증합니다.
-   *
-   * @param cartProductId
-   * @param user
-   * @param quantity
-   * @return
    */
   @Override
   public CartProductInfo modifyCartProductQuantity(
@@ -134,10 +118,6 @@ public class CartProductServiceImpl implements CartProductService {
   /**
    * 장바구니에 담긴 상품을 제거합니다.<br/>
    * 해당 장바구니 상품이 요청한 사용자에게 해당하는 상품인지 검증합니다.
-   *
-   * @param cartProductId
-   * @param user
-   * @return
    */
   @Override
   public Long deleteCartProductById(Long cartProductId, User user) {
@@ -147,6 +127,10 @@ public class CartProductServiceImpl implements CartProductService {
     return cartProductId;
   }
 
+  /**
+   * 유저의 장바구니 내 상품이 해당 상품의 재고 범위에 맞지 않는 경우 처리하는 서비스 로직입니다.
+   * "reset" 과 "remove"에 따라 다른 기능을 수행합니다.
+   */
   @Override
   public List<Long> handleCartProductQuantityExceededStock(String type, User user) {
     List<Long> cartProductQuantityExceededStockIds = new ArrayList<>();
@@ -158,6 +142,10 @@ public class CartProductServiceImpl implements CartProductService {
     return cartProductQuantityExceededStockIds;
   }
 
+  /**
+   * reset인 경우 장바구니 상품의 수량을 해당 상품의 재고 수로 변경합니다.
+   * 해당 상품의 재고가 0인 경우 장바구니 상품을 장바구니에서 제거합니다.
+   */
   @Override
   public void resetCartProductQuantityExceededStock(User user, List<Long> cartProductIds) {
     List<CartProduct> cartProducts
@@ -173,6 +161,9 @@ public class CartProductServiceImpl implements CartProductService {
     }
   }
 
+  /**
+   * remove인 경우 장바구니 상품을 장바구니에서 제거합니다.
+   */
   @Override
   public void removeCartProductQuantityExceededStock(User user, List<Long> cartProductIds) {
     List<CartProduct> cartProducts

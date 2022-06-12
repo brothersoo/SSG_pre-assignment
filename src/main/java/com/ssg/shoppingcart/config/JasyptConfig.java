@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 데이터 암호화를 위한 Jasypt 라이브러리 설정 클래스
+ * 데이터베이스 정보, JWT 암호 등의 데이터를 암호화합니다.
+ */
 @Configuration
 public class JasyptConfig {
 

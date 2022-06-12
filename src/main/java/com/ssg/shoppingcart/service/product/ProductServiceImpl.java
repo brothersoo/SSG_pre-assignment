@@ -24,9 +24,6 @@ public class ProductServiceImpl implements ProductService {
   /**
    * id를 사용하여 상품을 검색합니다.<br/>
    * id에 해당하는 상품이 없을 시 에러를 발생합니다.
-   *
-   * @param productId
-   * @return
    */
   @Override
   @Transactional(readOnly = true)
@@ -41,10 +38,6 @@ public class ProductServiceImpl implements ProductService {
   /**
    * 필터링 된 상품 리스트를 반환합니다.<br/>
    * 가격 범위, 상품 그룹, 정렬 기준을 필터에 정의할 수 있습니다.
-   *
-   * @param filter
-   * @param pageable
-   * @return
    */
   @Override
   @Transactional(readOnly = true)
@@ -58,9 +51,6 @@ public class ProductServiceImpl implements ProductService {
   /**
    * 선택된 상품 그룹 내의 상품들 중 최소 가격, 최대 가격을 반환합니다.<br/>
    * 프런트의 상품 가격 범위 슬라이더를 위해 사용됩니다.
-   *
-   * @param productGroupIds
-   * @return
    */
   @Override
   @Transactional(readOnly = true)

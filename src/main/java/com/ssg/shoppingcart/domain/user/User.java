@@ -2,9 +2,9 @@ package com.ssg.shoppingcart.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ssg.shoppingcart.domain.BaseTimeStampEntity;
-import com.ssg.shoppingcart.domain.product.CartProduct;
 import com.ssg.shoppingcart.domain.auth.UserRole;
 import com.ssg.shoppingcart.domain.order.Order;
+import com.ssg.shoppingcart.domain.product.CartProduct;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
@@ -23,6 +23,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 사용자 엔티티
+ */
 @Entity
 @Table(name = "ssg_user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

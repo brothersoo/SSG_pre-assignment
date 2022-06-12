@@ -43,9 +43,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
   /**
    * 이메일에 해당하는 유저를 반환합니다.<br/>
    * 해당하는 유저가 없을 시 에러를 발생합니다.
-   *
-   * @param userEmail
-   * @return
    */
   @Override
   @Transactional(readOnly = true)
@@ -59,9 +56,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
 
   /**
    * Http Request의 Header에 담겨있는 token을 사용하여 사용자를 검색하는 로직입니다.
-   *
-   * @param request
-   * @return
    */
   @Override
   @Transactional(readOnly = true)
@@ -75,10 +69,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
   /**
    * Spring security의 UserDetailService에서 오버라이딩 한 사용자 인증에 사용되는 메서드입니다.<br/>
    * 사용자의 권한 목록을 담은 UserDetails를 반환합니다.
-   *
-   * @param email
-   * @return
-   * @throws UsernameNotFoundException
    */
   @Override
   @Transactional(readOnly = true)
@@ -100,9 +90,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
    * 비밀번호 확인, 이메일 중복, 유저명 중복을 검증합니다.<br/>
    * 지정되어 있지 않다면 User Type은 Member로 설정됩니다.<br/>
    * MEMBER role을 추가합니다.
-   *
-   * @param registerData
-   * @return UserInfo
    */
   @Override
   public UserInfo register(RegisterRequest registerData) {
@@ -120,9 +107,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
 
   /**
    * Refresh token을 사용하여 새로운 access token을 발행하는 서비스 로직입니다.
-   *
-   * @param request
-   * @return
    */
   @Override
   @Transactional(readOnly = true)

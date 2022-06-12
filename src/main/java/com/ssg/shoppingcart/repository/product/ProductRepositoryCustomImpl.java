@@ -21,12 +21,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+/**
+ * 상품 리포지토리
+ */
 @Repository
 @RequiredArgsConstructor
 public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
   private final JPAQueryFactory queryFactory;
 
+  /**
+   * 페이지네이트, 필터링 된 상품 리스트를 반환
+   */
   @Override
   public Page<ProductInfo> findFilteredProducts(ProductListFilter filter, Pageable pageable) {
     BooleanBuilder condition = new BooleanBuilder();
@@ -72,6 +78,9 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     return new PageImpl(results, pageable, count);
   }
 
+  /**
+   * 주어진 상품 그룹들 내 상품들의 최소, 최대 가격을 반환
+   */
   @Override
   public PriceRangeInGroups getMinMaxPriceInProductGroups(List<Long> productGroupIds) {
     return queryFactory

@@ -12,6 +12,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 어떠한 기능에 대한 권한을 알리는 엔티티
+ * Role 내에 여러 Privilege가 포함되어있습니다.
+ */
 @Entity
 @Table(name = "ssg_privilege")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

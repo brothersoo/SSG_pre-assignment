@@ -19,6 +19,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 주문된 상품 엔티티
+ */
 @Entity
 @Table(name = "ssg_order_product")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

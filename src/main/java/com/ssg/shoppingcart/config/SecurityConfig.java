@@ -19,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+/**
+ * 사용자 인증을 위해 사용한 Spring Security를 위한 설정 클래스
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -29,6 +32,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private final AuthUtil authUtil;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+  /**
+   * UserDetailsService을 상속받은 AuthServiceImpl을 사용자 인증에 사용할 서비스로 지정합니다.
+   * 비밀번호 암호화에 BCryptPasswordEncoder를 사용할 것으로 지정합니다.
+   */
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth
@@ -36,6 +43,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .passwordEncoder(bCryptPasswordEncoder);
   }
 
+  /**
+   * http 통신에서의 보안 수준 및 데이터를 설정합니다.
+   * 인증에서의 cors 설정, role 및 privilege를 사용한 서비스 허가를 설정합니다.
+   */
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http

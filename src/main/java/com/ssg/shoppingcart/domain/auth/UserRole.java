@@ -18,6 +18,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * User과 Role 간 Many-To-Many 관계 엔티티
+ */
 @Entity
 @Table(name = "ssg_user_role")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

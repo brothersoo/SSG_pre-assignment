@@ -24,6 +24,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 주문 엔티티
+ */
 @Entity
 @Table(name = "ssg_order")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
