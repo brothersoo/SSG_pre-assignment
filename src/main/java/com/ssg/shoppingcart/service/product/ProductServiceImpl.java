@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
@@ -26,7 +26,6 @@ public class ProductServiceImpl implements ProductService {
    * id에 해당하는 상품이 없을 시 에러를 발생합니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public Product findByIdAndValidate(Long productId) {
     Optional<Product> optionalProduct = productRepository.findById(productId);
     if (!optionalProduct.isPresent()) {
@@ -40,7 +39,6 @@ public class ProductServiceImpl implements ProductService {
    * 가격 범위, 상품 그룹, 정렬 기준을 필터에 정의할 수 있습니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public Page<ProductInfo> findFilteredProducts(ProductListFilter filter, Pageable pageable) {
     pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1,
         pageable.getPageSize(),
@@ -53,7 +51,6 @@ public class ProductServiceImpl implements ProductService {
    * 프런트의 상품 가격 범위 슬라이더를 위해 사용됩니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public PriceRangeInGroups getMinMaxPriceInProductGroups(List<Long> productGroupIds) {
     return productRepository.getMinMaxPriceInProductGroups(productGroupIds);
   }

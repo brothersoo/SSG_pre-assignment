@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 사용자 관련 서비스 및 사용자 인증에 사용될 서비스가 정의되어있는 클래스 입니다.
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService, UserDetailsService {
 
@@ -45,7 +45,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
    * 해당하는 유저가 없을 시 에러를 발생합니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public User findUserByEmailAndValidate(String userEmail) {
     User user = userRepository.findByEmail(userEmail);
     if (user == null) {
@@ -58,7 +57,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
    * Http Request의 Header에 담겨있는 token을 사용하여 사용자를 검색하는 로직입니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public User findUserByHttpRequest(HttpServletRequest request) {
     String token = authUtil.isBearer(request);
     String userEmail = authUtil.decodeJWT(token).getSubject();
@@ -71,7 +69,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
    * 사용자의 권한 목록을 담은 UserDetails를 반환합니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     User user = findUserByEmailAndValidate(email);
 
@@ -92,6 +89,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
    * MEMBER role을 추가합니다.
    */
   @Override
+  @Transactional
   public UserInfo register(RegisterRequest registerData) {
     User userWithRequestEmail = userRepository.findByEmail(registerData.getEmail());
     User userWithRequestUsername = userRepository.findByUsername(registerData.getUsername());
@@ -109,7 +107,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
    * Refresh token을 사용하여 새로운 access token을 발행하는 서비스 로직입니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public LoginTokens refreshToken(HttpServletRequest request) {
     User user = findUserByHttpRequest(request);
     String issuer = request.getRequestURL().toString();

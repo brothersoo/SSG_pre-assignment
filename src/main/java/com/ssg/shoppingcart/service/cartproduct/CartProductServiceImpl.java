@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 장바구니와 관련된 서비스 로직을 포함하는 서비스 클래스입니다.
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CartProductServiceImpl implements CartProductService {
 
@@ -36,7 +36,6 @@ public class CartProductServiceImpl implements CartProductService {
    * id에 해당하는 장바구니 상품이 없을 시 에러를 발생합니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public CartProduct findByIdAndValidate(Long cartProductId) {
     CartProduct cartProduct = cartProductRepository.findByIdFetchProduct(cartProductId);
     if (cartProduct == null) {
@@ -54,6 +53,7 @@ public class CartProductServiceImpl implements CartProductService {
    * 수량이 재고 이하인지 검증합니다.
    */
   @Override
+  @Transactional
   public CartProductInfo addProductToCart(User user, Long productId, int quantity) {
     CartProduct cartProduct = cartProductRepository.findByUserAndProduct(user.getId(), productId);
     if (cartProduct != null) {
@@ -76,7 +76,6 @@ public class CartProductServiceImpl implements CartProductService {
    * 상품 그룹별로 묶어 반환합니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public Map<String, List<CartProductInfo>> findAllCartProductsForUser(User user) {
     List<CartProductInfo> cartProductInfos
         = cartProductRepository.findAllByUserEmail(user.getEmail());
@@ -105,6 +104,7 @@ public class CartProductServiceImpl implements CartProductService {
    * 수정 할 수량이 상품의 재고 내의 범위인지 검증합니다.
    */
   @Override
+  @Transactional
   public CartProductInfo modifyCartProductQuantity(
       Long cartProductId, User user, int quantity
   ) {
@@ -120,6 +120,7 @@ public class CartProductServiceImpl implements CartProductService {
    * 해당 장바구니 상품이 요청한 사용자에게 해당하는 상품인지 검증합니다.
    */
   @Override
+  @Transactional
   public Long deleteCartProductById(Long cartProductId, User user) {
     CartProduct cartProduct = findByIdAndValidate(cartProductId);
     cartProductValidator.validateOwner(cartProduct, user);
@@ -132,6 +133,7 @@ public class CartProductServiceImpl implements CartProductService {
    * "reset" 과 "remove"에 따라 다른 기능을 수행합니다.
    */
   @Override
+  @Transactional
   public List<Long> handleCartProductQuantityExceededStock(String type, User user) {
     List<Long> cartProductQuantityExceededStockIds = new ArrayList<>();
     if (type.equals("reset")) {
@@ -147,6 +149,7 @@ public class CartProductServiceImpl implements CartProductService {
    * 해당 상품의 재고가 0인 경우 장바구니 상품을 장바구니에서 제거합니다.
    */
   @Override
+  @Transactional
   public void resetCartProductQuantityExceededStock(User user, List<Long> cartProductIds) {
     List<CartProduct> cartProducts
         = cartProductRepository.findQuantityExceededStockFetchProduct(user.getId());

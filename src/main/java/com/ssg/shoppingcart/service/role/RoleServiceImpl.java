@@ -7,8 +7,10 @@ import com.ssg.shoppingcart.repository.role.RoleRepository;
 import com.ssg.shoppingcart.repository.role.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
@@ -31,6 +33,7 @@ public class RoleServiceImpl implements RoleService {
    * 지정한 사용자에게 role을 부여합니다.
    */
   @Override
+  @Transactional
   public Long grantRoleToUser(User user, String roleName) {
     Role role = findRoleByName(roleName);
     UserRole userRole = UserRole.builder().user(user).role(role).build();

@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
@@ -40,7 +40,6 @@ public class OrderServiceImpl implements OrderService {
    * id에 해당하는 주문이 없을 시 에러를 발생합니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public Order findByIdAndValidate(Long orderId) {
     Optional<Order> optionalOrder = orderRepository.findById(orderId);
     if (!optionalOrder.isPresent()) {
@@ -87,6 +86,7 @@ public class OrderServiceImpl implements OrderService {
    * 주문 상태가 COMPLETED인지 검증합니다.
    */
   @Override
+  @Transactional
   public OrderInfo refund(Long orderId, User user) {
     Order order = findByIdAndValidate(orderId);
     orderValidator.validateOrderRefundable(order);
@@ -101,7 +101,6 @@ public class OrderServiceImpl implements OrderService {
    * 사용자의 모든 주문들을 반환합니다.
    */
   @Override
-  @Transactional(readOnly = true)
   public List<OrderInfo> findAllOrdersForUser(User user) {
     List<Order> orders = orderRepository.findAllOrdersByUserEmail(user.getEmail());
     return orders.stream()
