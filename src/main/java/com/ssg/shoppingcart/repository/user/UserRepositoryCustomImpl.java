@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
-  private JPAQueryFactory queryFactory;
+  private final JPAQueryFactory queryFactory;
 
   /**
    * 사용자 이메일을 통하여 검색

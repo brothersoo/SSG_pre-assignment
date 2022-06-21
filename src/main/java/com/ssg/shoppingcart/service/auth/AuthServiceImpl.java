@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
    */
   @Override
   public User findUserByEmailAndValidate(String userEmail) {
-    User user = userRepository.findByEmail(userEmail);
+    User user = userRepository.findByEmailFetchPrivilege(userEmail);
     if (user == null) {
       throw new UsernameNotFoundException("user not found with the given email");
     }

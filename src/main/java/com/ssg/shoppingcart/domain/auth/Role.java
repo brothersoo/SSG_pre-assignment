@@ -2,7 +2,7 @@ package com.ssg.shoppingcart.domain.auth;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ssg.shoppingcart.domain.BaseTimeStampEntity;
-import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +35,7 @@ public class Role extends BaseTimeStampEntity {
 
   @OneToMany(targetEntity = RolePrivilege.class, mappedBy = "role")
   @JsonManagedReference
-  private List<RolePrivilege> rolePrivileges;
+  private Set<RolePrivilege> rolePrivileges;
 
   @Builder
   public Role(Long id, String name) {

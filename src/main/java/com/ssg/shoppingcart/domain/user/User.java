@@ -6,6 +6,7 @@ import com.ssg.shoppingcart.domain.auth.UserRole;
 import com.ssg.shoppingcart.domain.order.Order;
 import com.ssg.shoppingcart.domain.product.CartProduct;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -60,11 +61,11 @@ public class User extends BaseTimeStampEntity {
 
   @OneToMany(targetEntity = UserRole.class, cascade = CascadeType.ALL, mappedBy = "user")
   @JsonManagedReference
-  private List<UserRole> userRoles;
+  private Set<UserRole> userRoles;
 
   @Builder
   public User(Long id, String email, String password, String username, UserType type,
-      List<CartProduct> cartProducts, List<Order> orders, List<UserRole> userRoles) {
+      List<CartProduct> cartProducts, List<Order> orders, Set<UserRole> userRoles) {
     this.id = id;
     this.email = email;
     this.password = password;
