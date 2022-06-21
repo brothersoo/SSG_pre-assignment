@@ -3,7 +3,6 @@ package com.ssg.shoppingcart.domain.auth;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ssg.shoppingcart.domain.BaseTimeStampEntity;
 import com.ssg.shoppingcart.domain.user.User;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,12 +31,12 @@ public class UserRole extends BaseTimeStampEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_user_id")
   @JsonBackReference
   private User user;
 
-  @ManyToOne(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToOne(targetEntity = Role.class, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_role_id")
   @JsonBackReference
   private Role role;

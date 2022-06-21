@@ -2,7 +2,6 @@ package com.ssg.shoppingcart.domain.auth;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ssg.shoppingcart.domain.BaseTimeStampEntity;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,12 +30,12 @@ public class RolePrivilege extends BaseTimeStampEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToOne(targetEntity = Role.class, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_role_id")
   @JsonBackReference
   private Role role;
 
-  @ManyToOne(targetEntity = Privilege.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToOne(targetEntity = Privilege.class, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_privilege_id")
   @JsonBackReference
   private Privilege privilege;

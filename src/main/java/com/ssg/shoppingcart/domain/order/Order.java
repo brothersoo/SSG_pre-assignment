@@ -42,12 +42,12 @@ public class Order extends BaseTimeStampEntity {
   @Enumerated(value = EnumType.STRING)
   private OrderStatus status;
 
-  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
   @JoinColumn(name = "ssg_user_id")
   @JsonBackReference
   private User user;
 
-  @OneToMany(targetEntity = OrderProduct.class, mappedBy = "order", fetch = FetchType.LAZY)
+  @OneToMany(targetEntity = OrderProduct.class, cascade = CascadeType.ALL, mappedBy = "order")
   @JsonManagedReference
   private Set<OrderProduct> orderProducts;
 
