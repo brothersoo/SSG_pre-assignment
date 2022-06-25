@@ -5,9 +5,9 @@ spring:
   # datasource
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ssg_shopping_cart?useUnicode=yes&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Seoul
-    username: ssg_admin
-    password: 1234
+    url: ENC(wtPXx6p8Qk/3C3BhODgX9FBMsCuO2AV/sRcP3AdSXDLT1/hkPHST4yg4Rqa49Pseeraub6vq+/3yes5CDWtbj8NqAh6/21eTBiH45+lXeFc7iO5JRz7FNwK4AWKmkLbIto/IqHLIIyDCOS2RsXeXuLJ7PBYU7PoUgQHiiVbGhpQoKBdsbsjobA==)
+    username: ENC(aXpEoIWO5xRS4RrqpajFY821FhE7xZlm)
+    password: ENC(kPvWTMvA09si7H5KeH9uaXopdCBpkbSD)
   # JPA
   jpa:
     hibernate:
@@ -23,13 +23,13 @@ spring:
 # jasypt
 jasypt:
   encryptor:
-    password: ssg1234
+    password: ${JASYPT_PASSWORD}
 
 jwt:
-  secret: ssgjwt1234
+  secret: ${JWT_SECRET}
 
 # logging
 logging:
   level:
-    com.ssg.shoppingcart: debug
+    io.brothersoo.ecommerce.shoppingcart: debug
     org.hibernate: info
